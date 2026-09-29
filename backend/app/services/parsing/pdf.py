@@ -5,34 +5,17 @@ from typing import BinaryIO
 import pdfplumber
 import pypdf
 
+from app.services.parsing.exceptions import (
+    EmptyPDFError,
+    PDFPageLimitExceededError,
+    PDFParsingError,
+    PDFSizeLimitExceededError,
+)
+
 logger = logging.getLogger(__name__)
 
 MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
 MAX_PDF_PAGES = 100
-
-
-class PDFParsingError(Exception):
-    """Base exception for PDF parsing errors."""
-
-    pass
-
-
-class PDFSizeLimitExceededError(PDFParsingError):
-    """Raised when PDF file size exceeds the allowed limit."""
-
-    pass
-
-
-class PDFPageLimitExceededError(PDFParsingError):
-    """Raised when PDF page count exceeds the allowed limit."""
-
-    pass
-
-
-class EmptyPDFError(PDFParsingError):
-    """Raised when the parsed PDF contains no extractable text."""
-
-    pass
 
 
 def extract_text_from_pdf(
