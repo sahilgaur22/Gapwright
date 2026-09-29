@@ -1,4 +1,5 @@
 from typing import Any
+
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -59,8 +60,8 @@ class Settings(BaseSettings):
     def assemble_cors_origins(cls, v: Any) -> list[str]:
         if isinstance(v, str) and not v.startswith("["):
             return [i.strip() for i in v.split(",") if i.strip()]
-        elif isinstance(v, (list, str)):
-            return v
+        elif isinstance(v, list):
+            return [str(i) for i in v]
         raise ValueError(f"Invalid CORS_ORIGINS format: {v}")
 
 
