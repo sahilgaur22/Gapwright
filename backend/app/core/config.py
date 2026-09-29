@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     DATABASE_URL_MIGRATE: str | None = None
 
     # Security
-    JWT_SECRET: str = "change-me"
+    JWT_SECRET: str = "change-me-to-a-secure-secret-key-at-least-32-chars-long"
     JWT_EXPIRE_MINUTES: int = 60
 
     # LLM Settings
