@@ -13,6 +13,8 @@ from app.services.llm.prompts import (
     SYSTEM_INSTRUCTION_SKILL_EXTRACTION,
     SYSTEM_INSTRUCTION_SKILL_REPAIR,
 )
+from app.services.skills.chunking import SectionChunker
+from app.services.skills.merger import merge_and_deduplicate_skills
 
 logger = logging.getLogger(__name__)
 
@@ -99,3 +101,53 @@ async def extract_skills_from_text(
             raise ModelResponseError(
                 f"Skill extraction failed schema validation after repair: {repair_err}"
             ) from repair_err
+
+
+async def extract_skills_from_document(
+    text: str,
+    provider: LLMProvider,
+    *,
+    max_chunk_tokens: int = SectionChunker.DEFAULT_MAX_CHUNK_TOKENS,
+    overlap_tokens: int = SectionChunker.DEFAULT_OVERLAP_TOKENS,
+    max_repair_retries: int = 1,
+) -> SkillExtractionResult:
+    """Extract, aggregate, and deduplicate skills from long syllabus documents.
+
+    Uses section-aware chunking to break lengthy documents into pieces,
+    extracts skills per chunk with validation and repair, and then merges and
+    deduplicates all extracted skills.
+    """
+    cleaned_text = text.strip()
+    if not cleaned_text:
+        return SkillExtractionResult(skills=[])
+
+    chunks = SectionChunker.chunk_document(
+        cleaned_text,
+        max_chunk_tokens=max_chunk_tokens,
+        overlap_tokens=overlap_tokens,
+    )
+
+    if not chunks:
+        return SkillExtractionResult(skills=[])
+
+    # If only one chunk, single extraction is sufficient
+    if len(chunks) == 1:
+        return await extract_skills_from_text(
+            chunks[0],
+            provider,
+            max_repair_retries=max_repair_retries,
+        )
+
+    # Multi-chunk processing
+    all_extracted_skills: list[SkillExtractionItem] = []
+    for chunk in chunks:
+        result = await extract_skills_from_text(
+            chunk,
+            provider,
+            max_repair_retries=max_repair_retries,
+        )
+        all_extracted_skills.extend(result.skills)
+
+    # Merge and deduplicate across all chunks
+    merged = merge_and_deduplicate_skills(all_extracted_skills)
+    return SkillExtractionResult(skills=merged)
