@@ -11,6 +11,7 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: [path.resolve(__dirname, "./src/test/setup.ts")],
+    pool: "forks",
   },
   resolve: {
     alias: {

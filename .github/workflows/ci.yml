@@ -99,7 +99,9 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Run unit and component tests
-        run: npm test
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+        run: npm test -- --reporter=verbose
 
       - name: Build Next.js web application
         env:
