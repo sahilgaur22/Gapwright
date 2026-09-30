@@ -80,9 +80,7 @@ class AdzunaSource(BaseJobSource):
 
         company_dict = item.get("company") or {}
         company = (
-            company_dict.get("display_name")
-            if isinstance(company_dict, dict)
-            else None
+            company_dict.get("display_name") if isinstance(company_dict, dict) else None
         )
 
         location_dict = item.get("location") or {}
@@ -192,9 +190,7 @@ class AdzunaSource(BaseJobSource):
     ) -> list[RawJob]:
         """Search Adzuna job listings for role and optional location."""
         if not self.app_id or not self.app_key:
-            logger.warning(
-                "Adzuna credentials not configured. Skipping source."
-            )
+            logger.warning("Adzuna credentials not configured. Skipping source.")
             return []
 
         # Determine age cutoff

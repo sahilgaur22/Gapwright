@@ -11,9 +11,7 @@ from app.services.sources.utils import parse_iso_datetime
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_FIXTURE_PATH = (
-    Path(__file__).parent / "data" / "indian_jobs_fixture.json"
-)
+DEFAULT_FIXTURE_PATH = Path(__file__).parent / "data" / "indian_jobs_fixture.json"
 
 
 class FixtureSource(BaseJobSource):
@@ -111,8 +109,7 @@ class FixtureSource(BaseJobSource):
         return bool(
             words
             and all(
-                w in job.title.lower() or w in job.description.lower()
-                for w in words
+                w in job.title.lower() or w in job.description.lower() for w in words
             )
         )
 
@@ -147,11 +144,7 @@ class FixtureSource(BaseJobSource):
                 continue
             if not self._matches_location(job, location):
                 continue
-            if (
-                since_utc
-                and job.posted_at
-                and job.posted_at < since_utc
-            ):
+            if since_utc and job.posted_at and job.posted_at < since_utc:
                 continue
 
             results.append(job)

@@ -57,8 +57,7 @@ async def update_crawl_state(
     else:
         state.last_run_at = now
         if newest_posted_at and (
-            state.newest_posted_at is None
-            or newest_posted_at > state.newest_posted_at
+            state.newest_posted_at is None or newest_posted_at > state.newest_posted_at
         ):
             state.newest_posted_at = newest_posted_at
         if cursor is not None:

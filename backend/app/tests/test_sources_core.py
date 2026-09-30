@@ -45,6 +45,7 @@ async def test_session() -> AsyncGenerator[AsyncSession, None]:
 
 # --- Budget Tests ---
 
+
 @pytest.mark.asyncio
 async def test_api_usage_budget_flow(test_session: AsyncSession) -> None:
     source_name = "adzuna"
@@ -72,6 +73,7 @@ async def test_api_usage_budget_flow(test_session: AsyncSession) -> None:
 
 
 # --- Rate Limiter Tests ---
+
 
 @pytest.mark.asyncio
 async def test_token_bucket_and_rate_limiter() -> None:
@@ -102,6 +104,7 @@ async def test_token_bucket_and_rate_limiter() -> None:
 
 # --- Cache Tests ---
 
+
 def test_response_cache() -> None:
     cache = ResponseCache(default_ttl_seconds=1)
     cache.set("key1", {"jobs": ["jobA", "jobB"]})
@@ -120,6 +123,7 @@ def test_response_cache() -> None:
 
 # --- Robots Tests ---
 
+
 def test_robots_txt_checker() -> None:
     checker = RobotsChecker()
     robots_content = (
@@ -132,26 +136,33 @@ def test_robots_txt_checker() -> None:
     base = "https://example.com"
     checker.set_rules(base, robots_content)
 
-    assert checker.is_allowed(
-        "https://example.com/jobs/123", user_agent="GapwrightBot"
-    ) is True
-    assert checker.is_allowed(
-        "https://example.com/admin/login", user_agent="GapwrightBot"
-    ) is False
-    assert checker.is_allowed(
-        "https://example.com/private/data", user_agent="GapwrightBot"
-    ) is False
+    assert (
+        checker.is_allowed("https://example.com/jobs/123", user_agent="GapwrightBot")
+        is True
+    )
+    assert (
+        checker.is_allowed("https://example.com/admin/login", user_agent="GapwrightBot")
+        is False
+    )
+    assert (
+        checker.is_allowed(
+            "https://example.com/private/data", user_agent="GapwrightBot"
+        )
+        is False
+    )
 
     # Different user-agent should not be affected by GapwrightBot rules
-    assert checker.is_allowed(
-        "https://example.com/admin/login", user_agent="OtherBot"
-    ) is True
+    assert (
+        checker.is_allowed("https://example.com/admin/login", user_agent="OtherBot")
+        is True
+    )
 
     # Unconfigured domain defaults to allowed
     assert checker.is_allowed("https://otherdomain.org/jobs") is True
 
 
 # --- Registry Tests ---
+
 
 class DummyP1Source(BaseJobSource):
     @property
@@ -219,6 +230,7 @@ def test_source_registry_filtering_and_priority() -> None:
 
 
 # --- Seed Job Sources Tests ---
+
 
 @pytest.mark.asyncio
 async def test_seed_job_sources(test_session: AsyncSession) -> None:

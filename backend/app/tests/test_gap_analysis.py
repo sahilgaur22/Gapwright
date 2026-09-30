@@ -56,15 +56,11 @@ async def test_deterministic_gap_calculation_and_classification(
     s_python = Skill(canonical_name="Python", category="Languages")
     s_fastapi = Skill(canonical_name="FastAPI", category="Frameworks")
     s_docker = Skill(canonical_name="Docker", category="DevOps")
-    s_k8s = Skill(
-        canonical_name="Kubernetes", category="DevOps", aliases=["k8s"]
-    )
+    s_k8s = Skill(canonical_name="Kubernetes", category="DevOps", aliases=["k8s"])
     s_postgres = Skill(canonical_name="PostgreSQL", category="Databases")
     s_fortran = Skill(canonical_name="Fortran", category="Legacy")
 
-    test_session.add_all(
-        [s_python, s_fastapi, s_docker, s_k8s, s_postgres, s_fortran]
-    )
+    test_session.add_all([s_python, s_fastapi, s_docker, s_k8s, s_postgres, s_fortran])
     await test_session.flush()
 
     # 2. Create 4 active job postings for "Backend Developer" in "Bangalore" (P1 source)
@@ -150,9 +146,7 @@ async def test_deterministic_gap_calculation_and_classification(
     await test_session.flush()
 
     s_links = [
-        SyllabusSkill(
-            syllabus_id=syllabus.id, skill_id=s_python.id, evidence="Python"
-        ),
+        SyllabusSkill(syllabus_id=syllabus.id, skill_id=s_python.id, evidence="Python"),
         SyllabusSkill(
             syllabus_id=syllabus.id, skill_id=s_k8s_syllabus.id, evidence="K8s"
         ),
@@ -231,10 +225,12 @@ async def test_location_and_remote_source_filtering(
     test_session.add_all([p_bangalore, p_remote])
     await test_session.flush()
 
-    test_session.add_all([
-        JobSkill(job_id=p_bangalore.id, skill_id=py_skill.id),
-        JobSkill(job_id=p_remote.id, skill_id=go_skill.id),
-    ])
+    test_session.add_all(
+        [
+            JobSkill(job_id=p_bangalore.id, skill_id=py_skill.id),
+            JobSkill(job_id=p_remote.id, skill_id=go_skill.id),
+        ]
+    )
 
     syllabus = Syllabus(
         title="Cloud Course",

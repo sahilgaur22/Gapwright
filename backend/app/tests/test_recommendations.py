@@ -67,40 +67,42 @@ async def test_curriculum_recommendations_rule_based_fallback(
     # 2. Historical demand snaps for 30-day trend calculation
     # Docker demand grew from 20% to 50% (+30%)
     # FastAPI demand steady at 40% (0%)
-    test_session.add_all([
-        SkillDemandDaily(
-            day=(now - timedelta(days=25)).date(),
-            role_query="Backend Engineer",
-            location="San Francisco",
-            skill_id=s_docker.id,
-            postings_count=20,
-            demand_pct=0.20,
-        ),
-        SkillDemandDaily(
-            day=now.date(),
-            role_query="Backend Engineer",
-            location="San Francisco",
-            skill_id=s_docker.id,
-            postings_count=50,
-            demand_pct=0.50,
-        ),
-        SkillDemandDaily(
-            day=(now - timedelta(days=20)).date(),
-            role_query="Backend Engineer",
-            location="San Francisco",
-            skill_id=s_fastapi.id,
-            postings_count=40,
-            demand_pct=0.40,
-        ),
-        SkillDemandDaily(
-            day=now.date(),
-            role_query="Backend Engineer",
-            location="San Francisco",
-            skill_id=s_fastapi.id,
-            postings_count=40,
-            demand_pct=0.40,
-        ),
-    ])
+    test_session.add_all(
+        [
+            SkillDemandDaily(
+                day=(now - timedelta(days=25)).date(),
+                role_query="Backend Engineer",
+                location="San Francisco",
+                skill_id=s_docker.id,
+                postings_count=20,
+                demand_pct=0.20,
+            ),
+            SkillDemandDaily(
+                day=now.date(),
+                role_query="Backend Engineer",
+                location="San Francisco",
+                skill_id=s_docker.id,
+                postings_count=50,
+                demand_pct=0.50,
+            ),
+            SkillDemandDaily(
+                day=(now - timedelta(days=20)).date(),
+                role_query="Backend Engineer",
+                location="San Francisco",
+                skill_id=s_fastapi.id,
+                postings_count=40,
+                demand_pct=0.40,
+            ),
+            SkillDemandDaily(
+                day=now.date(),
+                role_query="Backend Engineer",
+                location="San Francisco",
+                skill_id=s_fastapi.id,
+                postings_count=40,
+                demand_pct=0.40,
+            ),
+        ]
+    )
 
     # 3. Create Syllabus and Analysis record
     syllabus = Syllabus(
@@ -226,22 +228,24 @@ async def test_curriculum_recommendations_with_mocked_llm(
     test_session.add(analysis)
     await test_session.flush()
 
-    test_session.add_all([
-        AnalysisItem(
-            analysis_id=analysis.id,
-            skill_id=s_k8s.id,
-            kind="missing",
-            demand_count=30,
-            demand_pct=0.60,
-        ),
-        AnalysisItem(
-            analysis_id=analysis.id,
-            skill_id=s_perl.id,
-            kind="obsolete",
-            demand_count=0,
-            demand_pct=0.0,
-        ),
-    ])
+    test_session.add_all(
+        [
+            AnalysisItem(
+                analysis_id=analysis.id,
+                skill_id=s_k8s.id,
+                kind="missing",
+                demand_count=30,
+                demand_pct=0.60,
+            ),
+            AnalysisItem(
+                analysis_id=analysis.id,
+                skill_id=s_perl.id,
+                kind="obsolete",
+                demand_count=0,
+                demand_pct=0.0,
+            ),
+        ]
+    )
     await test_session.commit()
 
     # 2. Mock LLMProvider

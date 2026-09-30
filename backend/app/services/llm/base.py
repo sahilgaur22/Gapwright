@@ -68,8 +68,10 @@ async def execute_with_retry[T](
                 )
                 raise
 
-            delay = exc.retry_after if exc.retry_after is not None else min(
-                base_delay * (2**attempt), max_delay
+            delay = (
+                exc.retry_after
+                if exc.retry_after is not None
+                else min(base_delay * (2**attempt), max_delay)
             )
             logger.warning(
                 f"{provider_name} rate limited. Retrying in {delay:.2f}s "

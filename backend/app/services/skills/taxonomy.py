@@ -61,7 +61,6 @@ SEED_TAXONOMY: list[TaxonomyEntry] = [
         "aliases": ["shell scripting", "bash scripting", "sh", "zsh"],
     },
     {"name": "HTML/CSS", "category": "Languages", "aliases": ["html", "html5", "css"]},
-
     # --- Frameworks & Web Libraries ---
     {"name": "FastAPI", "category": "Frameworks", "aliases": ["fast-api"]},
     {
@@ -107,7 +106,6 @@ SEED_TAXONOMY: list[TaxonomyEntry] = [
         "category": "Frameworks",
         "aliases": ["protobuf", "grpc services"],
     },
-
     # --- Databases & Storage ---
     {
         "name": "PostgreSQL",
@@ -137,7 +135,6 @@ SEED_TAXONOMY: list[TaxonomyEntry] = [
     },
     {"name": "Neo4j", "category": "Databases", "aliases": ["graph database neo4j"]},
     {"name": "SQLAlchemy", "category": "Databases", "aliases": ["sql alchemy"]},
-
     # --- Cloud & DevOps ---
     {
         "name": "Kubernetes",
@@ -207,7 +204,6 @@ SEED_TAXONOMY: list[TaxonomyEntry] = [
         "category": "Cloud & DevOps",
         "aliases": ["version control", "github"],
     },
-
     # --- Machine Learning & Data Science ---
     {
         "name": "Machine Learning",
@@ -261,7 +257,6 @@ SEED_TAXONOMY: list[TaxonomyEntry] = [
         "category": "Machine Learning",
         "aliases": ["rag", "rag pipelines", "vector search"],
     },
-
     # --- Data Engineering & Distributed Systems ---
     {
         "name": "Apache Spark",
@@ -282,7 +277,6 @@ SEED_TAXONOMY: list[TaxonomyEntry] = [
     },
     {"name": "Hadoop", "category": "Data Engineering", "aliases": ["hdfs"]},
     {"name": "dbt", "category": "Data Engineering", "aliases": ["data build tool"]},
-
     # --- Core Theory & Architecture ---
     {
         "name": "Data Structures & Algorithms",
@@ -334,7 +328,6 @@ SEED_TAXONOMY: list[TaxonomyEntry] = [
         "category": "Theory & Architecture",
         "aliases": ["security", "application security", "appsec"],
     },
-
     # --- Testing & Quality Assurance ---
     {
         "name": "Unit Testing",

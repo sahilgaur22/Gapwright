@@ -67,9 +67,7 @@ def test_is_alias_match() -> None:
 
     # Custom aliases
     assert is_alias_match("Postgres", ["PostgreSQL"], "PostgreSQL", []) is True
-    assert (
-        is_alias_match("React", ["ReactJS"], "React Native", ["ReactJS"]) is True
-    )
+    assert is_alias_match("React", ["ReactJS"], "React Native", ["ReactJS"]) is True
 
     # Completely unrelated
     assert is_alias_match("Python", [], "Gardening", []) is False

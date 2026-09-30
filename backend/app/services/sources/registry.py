@@ -19,9 +19,7 @@ class SourceRegistry:
         name = instance.name.lower().strip()
         self._source_classes[name] = connector_cls
         self._instances[name] = instance
-        logger.debug(
-            f"Registered job source: {name} (Priority {instance.priority})"
-        )
+        logger.debug(f"Registered job source: {name} (Priority {instance.priority})")
         return connector_cls
 
     def get_source(self, name: str) -> BaseJobSource | None:
@@ -44,8 +42,7 @@ class SourceRegistry:
         """
         enabled_names = set(self.get_configured_source_names())
         active = [
-            inst for name, inst in self._instances.items()
-            if name in enabled_names
+            inst for name, inst in self._instances.items() if name in enabled_names
         ]
         active.sort(key=lambda s: (s.priority, s.name))
         return active

@@ -79,11 +79,7 @@ class WeWorkRemotelyRSSSource(BaseJobSource):
             except Exception:
                 posted_at = None
 
-        raw_desc = (
-            entry.get("summary")
-            or entry.get("description")
-            or ""
-        )
+        raw_desc = entry.get("summary") or entry.get("description") or ""
 
         return RawJob(
             source=self.name,

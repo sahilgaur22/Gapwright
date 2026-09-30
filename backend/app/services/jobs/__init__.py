@@ -15,4 +15,3 @@ __all__ = [
     "parse_crawl_pairs",
     "persist_raw_jobs",
 ]
-

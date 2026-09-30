@@ -102,9 +102,7 @@ def test_skill_schema_validation() -> None:
 
     # Missing required field
     with pytest.raises(ValidationError):
-        SkillExtractionItem.model_validate(
-            {"name": "Python", "category": "Languages"}
-        )
+        SkillExtractionItem.model_validate({"name": "Python", "category": "Languages"})
 
 
 @pytest.mark.asyncio
@@ -139,9 +137,7 @@ async def test_extract_skills_from_golden_response() -> None:
 async def test_extract_skills_repair_retry_success() -> None:
     # First response is malformed (missing 'evidence' field)
     malformed_response = {
-        "skills": [
-            {"name": "Rust", "category": "Languages", "confidence": 0.9}
-        ]
+        "skills": [{"name": "Rust", "category": "Languages", "confidence": 0.9}]
     }
     # Second response is repaired and valid
     repaired_response = {

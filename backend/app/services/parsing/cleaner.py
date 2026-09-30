@@ -1,14 +1,10 @@
 import re
 
 # Regex for common bullet markers (unicode and ascii) at the start of a line
-BULLET_PATTERN = re.compile(
-    r"(?m)^([ \t]*)[•◦▪▫⁃‣\*\–—][ \t]+"
-)
+BULLET_PATTERN = re.compile(r"(?m)^([ \t]*)[•◦▪▫⁃‣\*\–—][ \t]+")
 
 # Regex for words hyphenated across a line wrap
-HYPHENATED_WRAP_PATTERN = re.compile(
-    r"(\b[a-zA-Z]{2,})-\s*\n\s*([a-zA-Z]{2,}\b)"
-)
+HYPHENATED_WRAP_PATTERN = re.compile(r"(\b[a-zA-Z]{2,})-\s*\n\s*([a-zA-Z]{2,}\b)")
 
 # Regex patterns for page numbers, headers, and footers
 PAGE_HEADER_FOOTER_PATTERNS = [

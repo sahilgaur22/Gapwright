@@ -88,9 +88,7 @@ async def seed_job_sources(db: AsyncSession) -> int:
             attr_text = (
                 str(meta["attribution_text"]) if meta["attribution_text"] else None
             )
-            attr_url = (
-                str(meta["attribution_url"]) if meta["attribution_url"] else None
-            )
+            attr_url = str(meta["attribution_url"]) if meta["attribution_url"] else None
             source = JobSource(
                 name=name,
                 priority=int(str(meta["priority"])),

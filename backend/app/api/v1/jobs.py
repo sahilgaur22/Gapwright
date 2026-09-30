@@ -226,13 +226,10 @@ async def list_sources(
         daily_budget = inst.default_daily_budget if inst else 50
 
         used = await get_daily_usage(db, src.name)
-        remaining = await get_remaining_budget(
-            db, src.name, limit=daily_budget
-        )
+        remaining = await get_remaining_budget(db, src.name, limit=daily_budget)
 
-        state_stmt = (
-            select(func.max(CrawlState.last_run_at))
-            .where(CrawlState.source == src.name)
+        state_stmt = select(func.max(CrawlState.last_run_at)).where(
+            CrawlState.source == src.name
         )
         state_res = await db.execute(state_stmt)
         last_run = state_res.scalar()

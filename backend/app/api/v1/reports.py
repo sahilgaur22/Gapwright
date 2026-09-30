@@ -25,9 +25,7 @@ router = APIRouter(prefix="/reports", tags=["Reports & Exports"])
 async def export_analysis_report(
     analysis_id: uuid.UUID,
     db: Annotated[AsyncSession, Depends(get_db)],
-    format: Annotated[
-        str, Query(description="Export format: 'csv' or 'pdf'")
-    ] = "csv",
+    format: Annotated[str, Query(description="Export format: 'csv' or 'pdf'")] = "csv",
 ) -> Response:
     """Export a curriculum gap analysis report in CSV or PDF format."""
     fmt = format.lower().strip()
@@ -35,8 +33,7 @@ async def export_analysis_report(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=(
-                f"Unsupported format '{format}'. Supported formats are "
-                "'csv' and 'pdf'."
+                f"Unsupported format '{format}'. Supported formats are 'csv' and 'pdf'."
             ),
         )
 
@@ -93,9 +90,7 @@ async def export_analysis_report(
             max_drop=3,
         )
     except Exception as e:
-        logger.warning(
-            "Could not generate recommendations for PDF report: %s", str(e)
-        )
+        logger.warning("Could not generate recommendations for PDF report: %s", str(e))
         recs = None
 
     pdf_bytes = generate_pdf_report(

@@ -19,4 +19,3 @@ __all__ = [
     "match_single_skill",
     "match_skills",
 ]
-

@@ -62,7 +62,10 @@ async def test_remotive_search_success_with_recorded_fixture(
     assert job.location == "Worldwide"
     assert "async programming" in job.description
     assert "<p>" not in job.description  # HTML tags cleaned
-    assert job.url == "https://remotive.com/remote-jobs/software-dev/senior-python-dev-1928371"
+    assert (
+        job.url
+        == "https://remotive.com/remote-jobs/software-dev/senior-python-dev-1928371"
+    )
     assert job.attribution_text == "Data from Remotive"
     assert job.attribution_url == "https://remotive.com"
     # Terms restriction: Remotive data is for internal statistics only
@@ -206,7 +209,9 @@ async def test_wwr_rss_search_success_with_recorded_fixture(
 ) -> None:
     source = WeWorkRemotelyRSSSource()
 
-    route = respx.get("https://weworkremotely.com/categories/remote-programming-jobs.rss").respond(
+    route = respx.get(
+        "https://weworkremotely.com/categories/remote-programming-jobs.rss"
+    ).respond(
         status_code=200,
         text=wwr_fixture_xml,
         headers={"Content-Type": "application/rss+xml"},
@@ -239,7 +244,9 @@ async def test_wwr_rss_filters_by_query_terms(
 ) -> None:
     source = WeWorkRemotelyRSSSource()
 
-    respx.get("https://weworkremotely.com/categories/remote-programming-jobs.rss").respond(
+    respx.get(
+        "https://weworkremotely.com/categories/remote-programming-jobs.rss"
+    ).respond(
         status_code=200,
         text=wwr_fixture_xml,
         headers={"Content-Type": "application/rss+xml"},

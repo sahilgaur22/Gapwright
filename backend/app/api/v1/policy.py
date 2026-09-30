@@ -34,9 +34,7 @@ router = APIRouter(prefix="/policy", tags=["Policymaker Overview"])
 @router.get("/overview", response_model=PolicyOverviewResponse)
 async def get_policymaker_overview(
     db: Annotated[AsyncSession, Depends(get_db)],
-    current_user: Annotated[
-        User, Depends(require_role("admin", "policymaker"))
-    ],
+    current_user: Annotated[User, Depends(require_role("admin", "policymaker"))],
 ) -> PolicyOverviewResponse:
     """Retrieve systemic curriculum gap statistics across institutions and roles.
 
@@ -118,9 +116,7 @@ async def get_policymaker_overview(
     roles_list.sort(key=lambda x: x.evaluations_count, reverse=True)
 
     # 4. Systemic missing skills aggregations
-    missing_skill_stats: dict[str, _SkillAccumulator] = defaultdict(
-        _SkillAccumulator
-    )
+    missing_skill_stats: dict[str, _SkillAccumulator] = defaultdict(_SkillAccumulator)
 
     for a in analyses:
         for it in a.items:

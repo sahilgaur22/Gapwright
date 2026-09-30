@@ -96,11 +96,7 @@ async def test_gemini_extract_json_success() -> None:
             200,
             json={
                 "candidates": [
-                    {
-                        "content": {
-                            "parts": [{"text": json.dumps(expected_data)}]
-                        }
-                    }
+                    {"content": {"parts": [{"text": json.dumps(expected_data)}]}}
                 ]
             },
         )
@@ -180,15 +176,7 @@ async def test_groq_extract_json_success() -> None:
     mock_route = respx.post("https://api.groq.com/openai/v1/chat/completions").mock(
         return_value=httpx.Response(
             200,
-            json={
-                "choices": [
-                    {
-                        "message": {
-                            "content": json.dumps(expected_data)
-                        }
-                    }
-                ]
-            },
+            json={"choices": [{"message": {"content": json.dumps(expected_data)}}]},
         )
     )
 
@@ -206,11 +194,7 @@ async def test_groq_embed_success() -> None:
     mock_route = respx.post("https://api.groq.com/openai/v1/embeddings").mock(
         return_value=httpx.Response(
             200,
-            json={
-                "data": [
-                    {"embedding": [0.5, 0.6, 0.7]}
-                ]
-            },
+            json={"data": [{"embedding": [0.5, 0.6, 0.7]}]},
         )
     )
 

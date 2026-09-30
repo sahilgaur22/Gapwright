@@ -100,7 +100,7 @@ async def test_upload_syllabus_pdf(
     _, token = await _create_user(test_session, "prof@mit.edu", institution_id=inst.id)
     pdf_bytes = _make_pdf_bytes(
         "CS 101: Introduction to Computer Science",
-        "Covers Python, algorithms, and data structures."
+        "Covers Python, algorithms, and data structures.",
     )
 
     response = await client.post(

@@ -117,9 +117,7 @@ def match_single_skill(
 
         for m in market_skills:
             if m.embedding is not None:
-                sim = compute_cosine_similarity(
-                    syllabus_skill.embedding, m.embedding
-                )
+                sim = compute_cosine_similarity(syllabus_skill.embedding, m.embedding)
                 if sim > best_sim:
                     best_sim = sim
                     best_match = m
@@ -183,9 +181,7 @@ async def find_semantic_matches_in_db(
         res = await db.execute(stmt)
         rows = res.all()
         return [
-            (skill, float(round(sim, 4)))
-            for skill, sim in rows
-            if sim >= threshold
+            (skill, float(round(sim, 4))) for skill, sim in rows if sim >= threshold
         ]
 
     # In-memory fallback (e.g. SQLite test engine)

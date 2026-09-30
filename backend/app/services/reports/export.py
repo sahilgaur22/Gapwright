@@ -50,7 +50,7 @@ def generate_csv_report(
     )
 
     # Sorted items
-    sorted_items = sorted(analysis.items, key=lambda x: (x.rank or 999))
+    sorted_items = sorted(analysis.items, key=lambda x: x.rank or 999)
     for it in sorted_items:
         skill_name = it.skill.canonical_name if it.skill else ""
         category = it.skill.category if it.skill and it.skill.category else "General"
@@ -143,9 +143,7 @@ def generate_pdf_report(
     story = []
 
     # 1. Header Banner
-    story.append(
-        Paragraph("GAPWRIGHT | CURRICULUM GAP ASSESSMENT REPORT", title_style)
-    )
+    story.append(Paragraph("GAPWRIGHT | CURRICULUM GAP ASSESSMENT REPORT", title_style))
     story.append(
         Paragraph(
             "Labour Market Intelligence & Higher Education Curriculum "
@@ -212,9 +210,7 @@ def generate_pdf_report(
     story.append(Spacer(1, 14))
 
     # 3. Itemized Competency Table
-    story.append(
-        Paragraph("Itemized Market Competency Evaluation", section_heading)
-    )
+    story.append(Paragraph("Itemized Market Competency Evaluation", section_heading))
 
     col_widths = [35, 180, 100, 95, 65, 65]
     table_rows = [
@@ -228,7 +224,7 @@ def generate_pdf_report(
         ]
     ]
 
-    sorted_items = sorted(analysis.items, key=lambda x: (x.rank or 999))
+    sorted_items = sorted(analysis.items, key=lambda x: x.rank or 999)
     for it in sorted_items:
         s_name = it.skill.canonical_name if it.skill else ""
         s_cat = it.skill.category if it.skill and it.skill.category else "General"

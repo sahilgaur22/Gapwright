@@ -251,10 +251,7 @@ def main() -> None:
         require_p1 = not args.no_require_p1
 
     print("\nStarting Gapwright Job Source Validation...")
-    print(
-        f"Role: '{args.role}' | Location: '{args.location}' | "
-        f"Limit: {args.limit}\n"
-    )
+    print(f"Role: '{args.role}' | Location: '{args.location}' | Limit: {args.limit}\n")
 
     results, success = asyncio.run(
         run_validation(
@@ -270,8 +267,7 @@ def main() -> None:
 
     if not success and require_p1:
         print(
-            "\n[VALIDATION FAILED] One or more P1 sources "
-            "returned 0 results or failed."
+            "\n[VALIDATION FAILED] One or more P1 sources returned 0 results or failed."
         )
         sys.exit(1)
     else:

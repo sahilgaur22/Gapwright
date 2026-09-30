@@ -35,9 +35,7 @@ def test_detect_format_by_magic_bytes() -> None:
 
 def test_detect_format_by_content_type() -> None:
     dummy_bytes = b"non-magic-content"
-    assert (
-        detect_format(dummy_bytes, content_type="application/pdf") == "pdf"
-    )
+    assert detect_format(dummy_bytes, content_type="application/pdf") == "pdf"
     assert (
         detect_format(
             dummy_bytes,

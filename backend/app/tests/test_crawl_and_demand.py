@@ -244,9 +244,7 @@ async def test_demand_snapshots_and_top_skills(
     assert count == 2  # Python and Docker
 
     # Verify snapshot in DB
-    snaps = (
-        (await test_session.execute(select(SkillDemandDaily))).scalars().all()
-    )
+    snaps = (await test_session.execute(select(SkillDemandDaily))).scalars().all()
     assert len(snaps) >= 2
 
     # 5. Query top demanded skills via service

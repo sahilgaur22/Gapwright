@@ -94,4 +94,3 @@ class CurriculumRecommendationsResponse(BaseModel):
     skills_to_add: list[SkillRecommendationItem] = Field(default_factory=list)
     skills_to_drop: list[SkillRecommendationItem] = Field(default_factory=list)
     summary: str
-

@@ -10,4 +10,3 @@ __all__ = [
     "stop_local_scheduler",
     "update_crawl_state",
 ]
-

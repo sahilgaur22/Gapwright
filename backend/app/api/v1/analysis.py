@@ -161,4 +161,3 @@ async def get_recommendations(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Recommendations generation failed: {str(e)}",
         ) from e
-
