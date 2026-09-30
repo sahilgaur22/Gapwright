@@ -1,0 +1,32 @@
+[
+  {
+    "legal": "By using Remote OK's API you agree to not scrape and only use this API. You also agree to link back to the job post on Remote OK using a regular HTML link (no nofollow or hidden).",
+    "terms": "https://remoteok.com/legal"
+  },
+  {
+    "id": "908124",
+    "epoch": "1727520000",
+    "date": "2026-09-28T10:40:00+00:00",
+    "company": "Automattic",
+    "position": "Staff Data Engineer",
+    "tags": ["python", "sql", "airflow", "snowflake", "spark"],
+    "description": "<p>Automattic is looking for a Staff Data Engineer to architect petabyte-scale event processing pipelines using Apache Spark, Kafka, and Snowflake.</p>",
+    "location": "Worldwide",
+    "url": "https://remoteok.com/remote-jobs/908124-staff-data-engineer",
+    "salary_min": 140000,
+    "salary_max": 180000
+  },
+  {
+    "id": "908125",
+    "epoch": "1727433600",
+    "date": "2026-09-27T10:40:00+00:00",
+    "company": "Shopify",
+    "position": "Senior Backend Developer",
+    "tags": ["ruby", "rails", "graphql", "docker", "kubernetes"],
+    "description": "<p>Shopify is hiring Senior Backend Developers to scale merchant checkout infrastructure handling millions of transactions.</p>",
+    "location": "Remote",
+    "url": "https://remoteok.com/remote-jobs/908125-senior-backend-developer",
+    "salary_min": 130000,
+    "salary_max": 170000
+  }
+]

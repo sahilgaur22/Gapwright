@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>We Work Remotely: Remote Programming Jobs</title>
+    <link>https://weworkremotely.com/categories/remote-programming-jobs.rss</link>
+    <description>The newest programming jobs from We Work Remotely.</description>
+    <language>en-us</language>
+    <pubDate>Mon, 28 Sep 2026 12:00:00 +0000</pubDate>
+    <item>
+      <title>DuckDuckGo: Senior Platform Engineer</title>
+      <link>https://weworkremotely.com/remote-jobs/duckduckgo-senior-platform-engineer-101</link>
+      <guid isPermaLink="false">wwr-job-101</guid>
+      <pubDate>Mon, 28 Sep 2026 10:15:00 +0000</pubDate>
+      <description><![CDATA[<p>DuckDuckGo is seeking a Senior Platform Engineer with deep expertise in Go, Kubernetes, and Linux networking to build distributed privacy systems.</p>]]></description>
+    </item>
+    <item>
+      <title>Stripe: Infrastructure Security Specialist</title>
+      <link>https://weworkremotely.com/remote-jobs/stripe-infrastructure-security-specialist-102</link>
+      <guid isPermaLink="false">wwr-job-102</guid>
+      <pubDate>Sun, 27 Sep 2026 15:30:00 +0000</pubDate>
+      <description><![CDATA[<p>Join Stripe's security team protecting global financial infrastructure using Terraform, AWS security controls, and Python automation.</p>]]></description>
+    </item>
+  </channel>
+</rss>

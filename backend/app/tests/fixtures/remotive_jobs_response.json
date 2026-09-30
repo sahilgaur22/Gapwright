@@ -1,0 +1,34 @@
+{
+  "0-legal-notice": "Remotive API is for personal or internal use only. Do not republish.",
+  "job-count": 2,
+  "jobs": [
+    {
+      "id": 1928371,
+      "url": "https://remotive.com/remote-jobs/software-dev/senior-python-dev-1928371",
+      "title": "Senior Python Backend Engineer",
+      "company_name": "GitLab",
+      "company_logo": "https://remotive.com/logo/gitlab.png",
+      "category": "Software Development",
+      "tags": ["python", "django", "postgresql", "docker"],
+      "job_type": "full_time",
+      "publication_date": "2026-09-28T09:30:00",
+      "candidate_required_location": "Worldwide",
+      "salary": "$130k - $160k",
+      "description": "<p>GitLab is looking for a <strong>Senior Python Developer</strong> with experience in async programming, PostgreSQL query optimization, and REST API design.</p>"
+    },
+    {
+      "id": 1928372,
+      "url": "https://remotive.com/remote-jobs/data/lead-data-analyst-1928372",
+      "title": "Lead Data Analyst",
+      "company_name": "Buffer",
+      "company_logo": "https://remotive.com/logo/buffer.png",
+      "category": "Data",
+      "tags": ["sql", "tableau", "python"],
+      "job_type": "full_time",
+      "publication_date": "2026-09-27T16:00:00",
+      "candidate_required_location": "Remote",
+      "salary": "$110k - $130k",
+      "description": "<p>Buffer is hiring a Lead Data Analyst to uncover product growth opportunities using SQL, dbt, and Python analytics libraries.</p>"
+    }
+  ]
+}
