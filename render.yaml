@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: gapwright-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: singapore
+    healthCheckPath: /healthz
+    autoDeploy: false
+    envVars:
+      - key: ENV
+        value: production
+      - key: ENABLE_PLAYWRIGHT
+        value: "false"
+      - key: EMBED_DIM
+        value: "768"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: LLM_PROVIDER
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: LLM_MODEL
+        sync: false
+      - key: EMBED_MODEL
+        sync: false
+      - key: ADZUNA_APP_ID
+        sync: false
+      - key: ADZUNA_APP_KEY
+        sync: false
+      - key: JOOBLE_API_KEY
+        sync: false
+      - key: ENABLED_SOURCES
+        sync: false
+      - key: CRAWL_PAIRS
+        sync: false
+      - key: CRAWL_TRIGGER_TOKEN
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false

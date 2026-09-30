@@ -1,0 +1,50 @@
+name: Deploy Backend
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: pip install -e .
+
+      - name: Run database migrations
+        working-directory: backend
+        env:
+          DATABASE_URL_MIGRATE: ${{ secrets.DATABASE_URL_MIGRATE }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL_MIGRATE }}
+        run: alembic upgrade head
+
+      - name: Trigger Render deploy
+        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+
+      - name: Wait for healthy API
+        run: |
+          for i in $(seq 1 20); do
+            if curl -fsS "${{ secrets.API_BASE_URL }}/healthz"; then exit 0; fi
+            echo "waiting ($i/20)"; sleep 15
+          done
+          echo "API did not become healthy"; exit 1
+
+      - name: Smoke test
+        run: curl -fsS "${{ secrets.API_BASE_URL }}/api/v1/sources" > /dev/null
