@@ -50,15 +50,35 @@ export interface Syllabus {
 
 export interface SourceSummary {
   name: string;
-  category: string;
-  enabled: boolean;
   priority: number;
-  supports_location: boolean;
+  enabled: boolean;
+  attribution_text?: string | null;
+  attribution_url?: string | null;
+  may_display_listing?: boolean;
   daily_budget: number;
-  calls_today: number;
-  budget_exhausted: boolean;
-  attribution_text?: string;
-  source_url?: string;
+  daily_calls_used: number;
+  remaining_budget: number;
+  last_run_at?: string | null;
+  category?: string;
+  supports_location?: boolean;
+}
+
+export interface SkillDemandItem {
+  skill_id: string;
+  name: string;
+  category?: string | null;
+  postings_count: number;
+  demand_pct: number;
+  trend_pct?: number;
+}
+
+export interface TopSkillsResponse {
+  role_query: string;
+  location?: string | null;
+  total_postings: number;
+  analysis_window_days: number;
+  trend_window_days: number;
+  skills: SkillDemandItem[];
 }
 
 export interface DemandMetric {
@@ -245,6 +265,23 @@ export const api = {
   },
 
   // Demand
+  getTopSkills: async (
+    role: string,
+    location?: string,
+    days = 30,
+    limit = 20
+  ): Promise<TopSkillsResponse> => {
+    const params = new URLSearchParams({
+      role,
+      days: String(days),
+      limit: String(limit),
+    });
+    if (location && location.toLowerCase() !== "all" && location.toLowerCase() !== "any") {
+      params.set("location", location);
+    }
+    return request(`/api/v1/jobs/skills/top?${params.toString()}`);
+  },
+
   getDemand: async (roleQuery: string, location?: string, days = 45): Promise<DemandStatsResponse> => {
     const params = new URLSearchParams({ role_query: roleQuery, days: String(days) });
     if (location) params.set("location", location);
