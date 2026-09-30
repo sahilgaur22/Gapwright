@@ -42,6 +42,8 @@ export interface Syllabus {
   id: string;
   title: string;
   filename: string;
+  course_code?: string | null;
+  institution?: string | null;
   status: "pending" | "processing" | "ready" | "failed";
   error_message?: string | null;
   created_at: string;
