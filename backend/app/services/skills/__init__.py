@@ -11,6 +11,7 @@ from app.services.skills.normalizer import (
     normalize_skills_batch,
     seed_skills_taxonomy,
 )
+from app.services.skills.pipeline import process_syllabus_pipeline
 from app.services.skills.taxonomy import SEED_TAXONOMY
 
 __all__ = [
@@ -23,5 +24,6 @@ __all__ = [
     "merge_and_deduplicate_skills",
     "normalize_skill",
     "normalize_skills_batch",
+    "process_syllabus_pipeline",
     "seed_skills_taxonomy",
 ]

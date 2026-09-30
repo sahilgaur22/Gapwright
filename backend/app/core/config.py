@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     SKILL_MATCH_THRESHOLD: float = 0.85
     OBSOLETE_DEMAND_THRESHOLD: float = 0.01
     ANALYSIS_WINDOW_DAYS: int = 45
+    AUTO_PROCESS_SYLLABI: bool = False
 
     # Job Sources
     ENABLED_SOURCES: str = "adzuna,jooble,remotive,remoteok,wwr_rss,fixture"

@@ -3,6 +3,7 @@ from typing import Annotated
 
 from fastapi import (
     APIRouter,
+    BackgroundTasks,
     Depends,
     File,
     Form,
@@ -14,11 +15,18 @@ from fastapi import (
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import settings
 from app.core.deps import get_current_active_user
-from app.db.models.syllabus import Syllabus
+from app.db.models.skill import Skill
+from app.db.models.syllabus import Syllabus, SyllabusSkill
 from app.db.models.user import User
 from app.db.session import get_db
-from app.schemas.syllabus import SyllabusListItem, SyllabusRead
+from app.schemas.syllabus import (
+    SyllabusListItem,
+    SyllabusRead,
+    SyllabusSkillRead,
+    SyllabusSkillsResponse,
+)
 from app.services.parsing import (
     DOCXSizeLimitExceededError,
     EmptyDOCXError,
@@ -28,10 +36,44 @@ from app.services.parsing import (
     UnsupportedFormatError,
     parse_document,
 )
+from app.services.skills.pipeline import process_syllabus_pipeline
 
 router = APIRouter(prefix="/syllabi", tags=["Syllabi"])
 
 MAX_UPLOAD_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
+
+
+async def _get_scoped_syllabus(
+    syllabus_id: uuid.UUID,
+    current_user: User,
+    db: AsyncSession,
+) -> Syllabus:
+    """Retrieve syllabus record verifying institution or uploader ownership scoping."""
+    query = select(Syllabus).where(Syllabus.id == syllabus_id)
+    result = await db.execute(query)
+    syllabus = result.scalar_one_or_none()
+
+    if not syllabus:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Syllabus not found",
+        )
+
+    if current_user.institution_id is not None:
+        if syllabus.institution_id != current_user.institution_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Syllabus not found",
+            )
+    elif current_user.role not in ("admin", "policymaker") and (
+        syllabus.uploaded_by != current_user.id
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Syllabus not found",
+        )
+
+    return syllabus
 
 
 @router.post(
@@ -45,11 +87,14 @@ async def upload_syllabus(
     file: Annotated[UploadFile, File()],
     current_user: Annotated[User, Depends(get_current_active_user)],
     db: Annotated[AsyncSession, Depends(get_db)],
+    background_tasks: BackgroundTasks,
     department: Annotated[str | None, Form(max_length=255)] = None,
+    auto_process: Annotated[bool, Query()] = False,
 ) -> Syllabus:
     """Upload a PDF or DOCX syllabus document, validate and parse its contents,
 
     persist metadata and raw_text, and return the created record.
+    Optionally queues background skill extraction and normalization pipeline.
     """
     contents = await file.read()
     if not contents:
@@ -103,10 +148,14 @@ async def upload_syllabus(
         filename=file.filename or "unknown",
         raw_text=raw_text,
         status="uploaded",
+        error_message=None,
     )
     db.add(syllabus)
     await db.commit()
     await db.refresh(syllabus)
+
+    if auto_process or settings.AUTO_PROCESS_SYLLABI:
+        background_tasks.add_task(process_syllabus_pipeline, syllabus.id)
 
     return syllabus
 
@@ -153,29 +202,80 @@ async def get_syllabus(
     db: Annotated[AsyncSession, Depends(get_db)],
 ) -> Syllabus:
     """Retrieve full syllabus details including raw_text, scoped to user institution."""
-    query = select(Syllabus).where(Syllabus.id == syllabus_id)
+    return await _get_scoped_syllabus(syllabus_id, current_user, db)
+
+
+@router.post(
+    "/{syllabus_id}/process",
+    response_model=SyllabusRead,
+    summary="Trigger skill extraction and normalization pipeline for a syllabus",
+)
+async def trigger_syllabus_process(
+    syllabus_id: uuid.UUID,
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+    background_tasks: BackgroundTasks,
+    async_mode: Annotated[bool, Query()] = False,
+) -> Syllabus:
+    """Trigger the skill extraction and normalization pipeline for a syllabus.
+
+    When async_mode is True, marks status as 'processing' and schedules
+    execution in background. When async_mode is False, executes pipeline
+    immediately within request and returns updated record.
+    """
+    syllabus = await _get_scoped_syllabus(syllabus_id, current_user, db)
+
+    if async_mode:
+        syllabus.status = "processing"
+        syllabus.error_message = None
+        db.add(syllabus)
+        await db.commit()
+        await db.refresh(syllabus)
+        background_tasks.add_task(process_syllabus_pipeline, syllabus.id)
+        return syllabus
+
+    return await process_syllabus_pipeline(syllabus.id, db=db)
+
+
+@router.get(
+    "/{syllabus_id}/skills",
+    response_model=SyllabusSkillsResponse,
+    summary="Get extracted and normalized skills for a syllabus",
+)
+async def get_syllabus_skills(
+    syllabus_id: uuid.UUID,
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> SyllabusSkillsResponse:
+    """Retrieve normalized skill nodes for a syllabus with evidence and confidence."""
+    syllabus = await _get_scoped_syllabus(syllabus_id, current_user, db)
+
+    query = (
+        select(SyllabusSkill, Skill)
+        .join(Skill, SyllabusSkill.skill_id == Skill.id)
+        .where(SyllabusSkill.syllabus_id == syllabus.id)
+        .order_by(SyllabusSkill.confidence.desc(), Skill.canonical_name.asc())
+    )
     result = await db.execute(query)
-    syllabus = result.scalar_one_or_none()
+    rows = result.all()
 
-    if not syllabus:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Syllabus not found",
-        )
-
-    # Scoping check
-    if current_user.institution_id is not None:
-        if syllabus.institution_id != current_user.institution_id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Syllabus not found",
+    skills_data: list[SyllabusSkillRead] = []
+    for assoc, skill_node in rows:
+        skills_data.append(
+            SyllabusSkillRead(
+                skill_id=skill_node.id,
+                canonical_name=skill_node.canonical_name,
+                category=skill_node.category,
+                aliases=skill_node.aliases or [],
+                evidence=assoc.evidence,
+                confidence=float(assoc.confidence),
             )
-    elif current_user.role not in ("admin", "policymaker") and (
-        syllabus.uploaded_by != current_user.id
-    ):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Syllabus not found",
         )
 
-    return syllabus
+    return SyllabusSkillsResponse(
+        syllabus_id=syllabus.id,
+        status=syllabus.status,
+        error_message=syllabus.error_message,
+        skills=skills_data,
+        total=len(skills_data),
+    )
