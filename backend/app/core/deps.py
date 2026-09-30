@@ -46,6 +46,13 @@ async def get_current_user(
     return user
 
 
+async def get_current_active_user(
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> User:
+    """Dependency that returns the current active user."""
+    return current_user
+
+
 def require_role(*allowed_roles: str) -> Callable[[User], User]:
     """Dependency factory enforcing allowed user roles."""
 
