@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from app.api.v1 import api_router
 from app.core.config import settings
@@ -21,15 +22,20 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger.info(f"Shutting down {settings.PROJECT_NAME}")
 
 
+is_production = settings.ENV == "production"
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     description="Automated Syllabus-to-Industry Gap Analyzer API",
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    openapi_url=None if is_production else f"{settings.API_V1_STR}/openapi.json",
+    docs_url=None if is_production else "/docs",
+    redoc_url=None if is_production else "/redoc",
     lifespan=lifespan,
 )
+
+# Reverse proxy headers middleware
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
 # CORS Middleware
 app.add_middleware(
