@@ -1,0 +1,40 @@
+{
+  "hits": [
+    {
+      "created_at": "2026-09-01T16:30:00.000Z",
+      "title": null,
+      "url": null,
+      "author": "stripe_recruiter",
+      "points": null,
+      "story_text": null,
+      "comment_text": "<p>Stripe | Infrastructure Engineer | San Francisco, CA | Full-Time | REMOTE</p><p>We are expanding our core infrastructure reliability team. Looking for engineers experienced in Go, Kubernetes, Kafka, and Linux networking. Competitive salary and equity.</p>",
+      "num_comments": null,
+      "story_id": 41415161,
+      "story_title": "Ask HN: Who is hiring? (September 2026)",
+      "story_url": null,
+      "parent_id": 41415161,
+      "created_at_i": 1725208200,
+      "objectID": "41415999"
+    },
+    {
+      "created_at": "2026-09-01T17:15:00.000Z",
+      "title": null,
+      "url": null,
+      "author": "fly_io",
+      "points": null,
+      "story_text": null,
+      "comment_text": "<p>Fly.io | Rust Systems Engineer | Remote (Worldwide) | Full-time</p><p>Fly.io runs applications close to users. We are hiring Rust systems developers with deep knowledge of Linux kernel, BPF, WireGuard, and distributed SQLite.</p>",
+      "num_comments": null,
+      "story_id": 41415161,
+      "story_title": "Ask HN: Who is hiring? (September 2026)",
+      "story_url": null,
+      "parent_id": 41415161,
+      "created_at_i": 1725210900,
+      "objectID": "41416000"
+    }
+  ],
+  "nbHits": 2,
+  "page": 0,
+  "nbPages": 1,
+  "hitsPerPage": 50
+}

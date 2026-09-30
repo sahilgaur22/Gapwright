@@ -1,0 +1,110 @@
+[
+  {
+    "id": "ind-blr-001",
+    "title": "Lead Data Scientist",
+    "company": "Swiggy",
+    "location": "Bangalore, Karnataka",
+    "description": "Swiggy is seeking an experienced Lead Data Scientist to build dynamic pricing and recommendation algorithms. Core requirements include deep proficiency in Python, PyTorch, TensorFlow, Scikit-Learn, SQL, and distributed model deployment on AWS with MLflow and Docker.",
+    "url": "https://careers.swiggy.com/jobs/ind-blr-001",
+    "posted_at": "2026-09-28T09:00:00+00:00"
+  },
+  {
+    "id": "ind-blr-002",
+    "title": "Senior Backend Engineer - Distributed Systems",
+    "company": "Razorpay",
+    "location": "Bangalore, Karnataka",
+    "description": "Join Razorpay's Core Payments team building high-throughput payment gateways. You will architect resilient microservices using Go, Python, PostgreSQL, Redis, Kafka, and Kubernetes with low latency and high consistency guarantees.",
+    "url": "https://razorpay.com/jobs/ind-blr-002",
+    "posted_at": "2026-09-28T10:30:00+00:00"
+  },
+  {
+    "id": "ind-hyd-003",
+    "title": "Staff DevOps & Site Reliability Engineer",
+    "company": "ServiceNow",
+    "location": "Hyderabad, Telangana",
+    "description": "ServiceNow Hyderabad is hiring a Staff DevOps/SRE lead. Responsible for enterprise infrastructure automation with Terraform, Ansible, Kubernetes, Helm, CI/CD pipelines in GitLab, Prometheus, Grafana, and AWS/Azure multi-cloud operations.",
+    "url": "https://servicenow.com/careers/ind-hyd-003",
+    "posted_at": "2026-09-27T14:15:00+00:00"
+  },
+  {
+    "id": "ind-pun-004",
+    "title": "Senior Machine Learning Engineer",
+    "company": "Persistent Systems",
+    "location": "Pune, Maharashtra",
+    "description": "Looking for a Senior ML Engineer to build computer vision and natural language processing pipelines. Must have solid expertise in Python, Hugging Face Transformers, LangChain, PyTorch, Vector Databases (Pinecone, pgvector), and REST APIs with FastAPI.",
+    "url": "https://persistent.com/careers/ind-pun-004",
+    "posted_at": "2026-09-28T11:45:00+00:00"
+  },
+  {
+    "id": "ind-mum-005",
+    "title": "Cloud Architect - Financial Platforms",
+    "company": "Jio Financial Services",
+    "location": "Mumbai, Maharashtra",
+    "description": "Architect scalable digital banking and payment systems on AWS and hybrid cloud. Strong experience in Cloud Security, VPC peering, Kubernetes (EKS), Apache Kafka, PostgreSQL, Terraform, and zero-trust IAM architecture required.",
+    "url": "https://jio.com/careers/ind-mum-005",
+    "posted_at": "2026-09-26T16:00:00+00:00"
+  },
+  {
+    "id": "ind-del-006",
+    "title": "Principal Full Stack Developer",
+    "company": "Zomato",
+    "location": "Gurgaon, Delhi NCR",
+    "description": "Zomato is looking for a Principal Full Stack Developer to lead merchant web platforms. Stack includes React, Next.js, TypeScript, Node.js, Go, Redis, PostgreSQL, and GraphQL. Experience in web performance optimization and system architecture is essential.",
+    "url": "https://zomato.com/careers/ind-del-006",
+    "posted_at": "2026-09-28T13:20:00+00:00"
+  },
+  {
+    "id": "ind-blr-007",
+    "title": "Big Data Engineer - Real-Time Analytics",
+    "company": "Flipkart",
+    "location": "Bangalore, Karnataka",
+    "description": "Flipkart Supply Chain team is hiring a Senior Data Engineer. You will design streaming ETL pipelines processing billions of events using Apache Spark, Apache Flink, Kafka, Hadoop, Hive, Scala, and Google BigQuery.",
+    "url": "https://flipkartcareers.com/jobs/ind-blr-007",
+    "posted_at": "2026-09-27T08:30:00+00:00"
+  },
+  {
+    "id": "ind-rem-008",
+    "title": "Frontend Engineer - Design Systems",
+    "company": "Postman",
+    "location": "Remote - India",
+    "description": "Postman is looking for a Frontend Engineer to expand our open-source API client UI and design system. Requires deep knowledge of TypeScript, React, Tailwind CSS, Webpack, WebSockets, accessibility standards (a11y), and Cypress testing.",
+    "url": "https://postman.com/careers/ind-rem-008",
+    "posted_at": "2026-09-29T10:00:00+00:00"
+  },
+  {
+    "id": "ind-blr-009",
+    "title": "AI & NLP Research Scientist",
+    "company": "Krutrim",
+    "location": "Bangalore, Karnataka",
+    "description": "Join Krutrim's foundational model team in Bangalore. Conduct research in LLM pre-training, fine-tuning with LoRA/QLoRA, RLHF, tokenization, CUDA optimization, and multilingual evaluation across Indic languages.",
+    "url": "https://krutrim.ai/careers/ind-blr-009",
+    "posted_at": "2026-09-28T15:00:00+00:00"
+  },
+  {
+    "id": "ind-hyd-010",
+    "title": "Cybersecurity & Cloud Security Engineer",
+    "company": "Microsoft",
+    "location": "Hyderabad, Telangana",
+    "description": "Microsoft IDC Hyderabad is hiring a Cloud Security Engineer for Azure security services. Focus on penetration testing, threat modeling, Kubernetes security policies, SIEM integration, Python automation, and OAuth2/SAML authentication protocols.",
+    "url": "https://careers.microsoft.com/jobs/ind-hyd-010",
+    "posted_at": "2026-09-27T11:00:00+00:00"
+  },
+  {
+    "id": "ind-del-011",
+    "title": "Backend Python / FastAPI Developer",
+    "company": "Paytm",
+    "location": "Noida, Delhi NCR",
+    "description": "Paytm is seeking a Backend Developer proficient in Python, FastAPI, SQLAlchemy, PostgreSQL, and RabbitMQ. You will build consumer lending and KYC APIs handling millions of daily requests with high reliability.",
+    "url": "https://paytm.com/careers/ind-del-011",
+    "posted_at": "2026-09-28T12:00:00+00:00"
+  },
+  {
+    "id": "ind-blr-012",
+    "title": "Site Reliability Engineer - Observability",
+    "company": "Zerodha",
+    "location": "Bangalore, Karnataka",
+    "description": "Zerodha's infrastructure team runs self-hosted low-latency stock trading platforms. We need an SRE skilled in Linux internals, Go, Python, HAProxy, Prometheus, Vector, ClickHouse, and network kernel tuning.",
+    "url": "https://zerodha.com/careers/ind-blr-012",
+    "posted_at": "2026-09-29T08:00:00+00:00"
+  }
+]

@@ -1,4 +1,5 @@
 from app.services.sources.adzuna import AdzunaSource
+from app.services.sources.arbeitnow import ArbeitnowSource
 from app.services.sources.base import BaseJobSource
 from app.services.sources.budget import (
     BudgetExhaustedError,
@@ -8,6 +9,8 @@ from app.services.sources.budget import (
     record_usage,
 )
 from app.services.sources.cache import ResponseCache, response_cache
+from app.services.sources.fixture import FixtureSource
+from app.services.sources.hn_hiring import HNHiringSource
 from app.services.sources.jooble import JoobleSource
 from app.services.sources.limiter import DomainRateLimiter, TokenBucket, rate_limiter
 from app.services.sources.models import RawJob
@@ -24,12 +27,18 @@ source_registry.register(JoobleSource)
 source_registry.register(RemotiveSource)
 source_registry.register(RemoteOKSource)
 source_registry.register(WeWorkRemotelyRSSSource)
+source_registry.register(ArbeitnowSource)
+source_registry.register(HNHiringSource)
+source_registry.register(FixtureSource)
 
 __all__ = [
     "AdzunaSource",
+    "ArbeitnowSource",
     "BaseJobSource",
     "BudgetExhaustedError",
     "DomainRateLimiter",
+    "FixtureSource",
+    "HNHiringSource",
     "INITIAL_JOB_SOURCES",
     "JoobleSource",
     "RawJob",

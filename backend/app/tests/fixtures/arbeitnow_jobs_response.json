@@ -1,0 +1,42 @@
+{
+  "data": [
+    {
+      "slug": "senior-python-backend-engineer-berlin-1001",
+      "company_name": "Delivery Hero",
+      "title": "Senior Python Backend Engineer",
+      "description": "<p>Delivery Hero is looking for a Senior Backend Engineer in Berlin or remote EU. You will build microservices using Python, FastAPI, Kafka, and Kubernetes.</p>",
+      "remote": true,
+      "url": "https://www.arbeitnow.com/jobs/delivery-hero/senior-python-backend-engineer-berlin-1001",
+      "tags": ["python", "fastapi", "kafka", "docker"],
+      "job_types": ["Full Time"],
+      "location": "Berlin, Germany",
+      "created_at": 1727510400
+    },
+    {
+      "slug": "data-platform-lead-munich-1002",
+      "company_name": "Celonis",
+      "title": "Data Platform Lead",
+      "description": "<p>Celonis is hiring a Data Platform Lead to scale execution management systems using Spark, Snowflake, and Python data pipelines.</p>",
+      "remote": false,
+      "url": "https://www.arbeitnow.com/jobs/celonis/data-platform-lead-munich-1002",
+      "tags": ["spark", "snowflake", "python", "aws"],
+      "job_types": ["Full Time"],
+      "location": "Munich, Germany",
+      "created_at": 1727424000
+    }
+  ],
+  "links": {
+    "first": "https://www.arbeitnow.com/api/job-board-api?page=1",
+    "last": "https://www.arbeitnow.com/api/job-board-api?page=5",
+    "prev": null,
+    "next": "https://www.arbeitnow.com/api/job-board-api?page=2"
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "path": "https://www.arbeitnow.com/api/job-board-api",
+    "per_page": 15,
+    "to": 2,
+    "total": 2
+  }
+}
