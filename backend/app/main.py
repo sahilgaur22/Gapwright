@@ -7,13 +7,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1 import api_router
 from app.core.config import settings
 from app.core.logging import logger, setup_logging
+from app.services.crawl.scheduler import start_local_scheduler, stop_local_scheduler
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     setup_logging()
     logger.info(f"Starting {settings.PROJECT_NAME} in {settings.ENV} mode")
+    scheduler = start_local_scheduler()
     yield
+    if scheduler is not None:
+        stop_local_scheduler(scheduler)
     logger.info(f"Shutting down {settings.PROJECT_NAME}")
 
 

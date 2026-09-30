@@ -28,6 +28,7 @@ class JobPostingRead(BaseModel):
     posted_at: datetime | None = None
     scraped_at: datetime
     last_seen_at: datetime
+    is_expired: bool = False
     skills: list[str] = Field(default_factory=list)
 
 
@@ -60,3 +61,41 @@ class PersistenceResult(BaseModel):
     duplicate_count: int = 0
     skipped_llm_count: int = 0
     extracted_skills_count: int = 0
+
+
+class CrawlPairRequest(BaseModel):
+    role: str
+    location: str
+
+
+class CrawlTriggerRequest(BaseModel):
+    pairs: list[CrawlPairRequest] | None = None
+    sources: list[str] | None = None
+    extract_skills: bool = True
+
+
+class CrawlTriggerResponse(BaseModel):
+    status: str
+    pairs_processed: int
+    sources_crawled: int
+    jobs_persisted: int
+    expired_count: int
+    snapshot_records_created: int
+
+
+class SkillDemandItem(BaseModel):
+    skill_id: uuid.UUID
+    name: str
+    category: str | None = None
+    postings_count: int
+    demand_pct: float
+    trend_pct: float = 0.0
+
+
+class TopSkillsResponse(BaseModel):
+    role_query: str
+    location: str | None = None
+    total_postings: int
+    analysis_window_days: int
+    trend_window_days: int
+    skills: list[SkillDemandItem]

@@ -76,6 +76,9 @@ class JobPosting(Base):
     last_seen_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+    is_expired: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False, index=True
+    )
 
     job_source: Mapped[JobSource] = relationship("JobSource", back_populates="postings")
     skills: Mapped[list["JobSkill"]] = relationship(

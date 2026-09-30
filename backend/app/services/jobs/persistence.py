@@ -64,6 +64,7 @@ async def persist_raw_jobs(
 
         if existing_posting is not None:
             existing_posting.last_seen_at = now
+            existing_posting.is_expired = False
             result.updated_count += 1
             result.skipped_llm_count += 1
             continue
@@ -82,6 +83,7 @@ async def persist_raw_jobs(
 
             if dup_posting is not None:
                 dup_posting.last_seen_at = now
+                dup_posting.is_expired = False
                 result.duplicate_count += 1
                 result.skipped_llm_count += 1
                 continue
