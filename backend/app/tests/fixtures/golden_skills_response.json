@@ -1,0 +1,22 @@
+{
+  "skills": [
+    {
+      "name": "PyTorch",
+      "category": "Machine Learning",
+      "evidence": "Hands-on model development will use PyTorch for tensor operations and backpropagation.",
+      "confidence": 0.98
+    },
+    {
+      "name": "Transformer Architecture",
+      "category": "Theory & Algorithms",
+      "evidence": "Week 6 analyzes self-attention mechanisms and Transformer architecture.",
+      "confidence": 0.95
+    },
+    {
+      "name": "Docker",
+      "category": "Cloud & DevOps",
+      "evidence": "All lab assignments must be containerized and run inside Docker containers.",
+      "confidence": 0.9
+    }
+  ]
+}
