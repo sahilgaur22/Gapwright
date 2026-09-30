@@ -1,0 +1,42 @@
+{
+  "results": [
+    {
+      "id": "4810291011",
+      "title": "Lead Data Scientist",
+      "company": {
+        "display_name": "Fractal Analytics"
+      },
+      "location": {
+        "display_name": "Bangalore, Karnataka",
+        "area": [
+          "India",
+          "Karnataka",
+          "Bangalore"
+        ]
+      },
+      "description": "Looking for a Lead Data Scientist with deep expertise in Python, PyTorch, and NLP architectures. Experience in deploying machine learning models on Kubernetes is preferred.",
+      "redirect_url": "https://www.adzuna.in/land/ad/4810291011?se=sample",
+      "created": "2026-09-28T08:30:00Z"
+    },
+    {
+      "id": "4810291012",
+      "title": "Senior Machine Learning Engineer",
+      "company": {
+        "display_name": "InMobi"
+      },
+      "location": {
+        "display_name": "Bangalore, Karnataka",
+        "area": [
+          "India",
+          "Karnataka",
+          "Bangalore"
+        ]
+      },
+      "description": "Seeking an ML Engineer to scale real-time recommendation engines using Spark, Kafka, AWS, and Docker. Strong algorithmic foundations required.",
+      "redirect_url": "https://www.adzuna.in/land/ad/4810291012?se=sample",
+      "created": "2026-09-27T14:15:00Z"
+    }
+  ],
+  "count": 2,
+  "mean_salary": 2400000.0
+}

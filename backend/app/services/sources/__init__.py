@@ -1,3 +1,4 @@
+from app.services.sources.adzuna import AdzunaSource
 from app.services.sources.base import BaseJobSource
 from app.services.sources.budget import (
     BudgetExhaustedError,
@@ -13,7 +14,11 @@ from app.services.sources.registry import SourceRegistry, source_registry
 from app.services.sources.robots import RobotsChecker, robots_checker
 from app.services.sources.seed import INITIAL_JOB_SOURCES, seed_job_sources
 
+# Register available connectors
+source_registry.register(AdzunaSource)
+
 __all__ = [
+    "AdzunaSource",
     "BaseJobSource",
     "BudgetExhaustedError",
     "DomainRateLimiter",
