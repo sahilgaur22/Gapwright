@@ -27,6 +27,7 @@ htmlcov/
 .venv/
 venv/
 ENV/
+uv.lock
 
 # Node & Next.js
 node_modules/
