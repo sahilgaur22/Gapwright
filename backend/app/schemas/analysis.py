@@ -60,3 +60,38 @@ class AnalysisCreateRequest(BaseModel):
     role_query: str = Field(..., min_length=1)
     location: str | None = None
     remote_only: bool = False
+
+
+class SkillRecommendationAction(StrEnum):
+    ADD = "add"
+    DROP = "drop"
+
+
+class SkillRecommendationItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    skill_id: uuid.UUID
+    skill_name: str
+    category: str | None = None
+    action: SkillRecommendationAction
+    demand_pct: float
+    trend_pct: float = 0.0
+    rationale: str
+    suggested_module: str = ""
+    suggested_weeks: int = 2
+
+
+class CurriculumRecommendationsResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    analysis_id: uuid.UUID
+    syllabus_id: uuid.UUID
+    course_title: str
+    role_query: str
+    location: str
+    gap_pct: float
+    coverage_pct: float
+    skills_to_add: list[SkillRecommendationItem] = Field(default_factory=list)
+    skills_to_drop: list[SkillRecommendationItem] = Field(default_factory=list)
+    summary: str
+

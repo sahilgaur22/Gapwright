@@ -46,3 +46,39 @@ SKILL_REPAIR_USER_TEMPLATE = (
     "Malformed Output:\n```json\n{raw_output}\n```\n\n"
     "Please repair and return strictly valid JSON matching the required schema."
 )
+
+PROMPT_VERSION_RECOMMENDATIONS = "v1.0.0"
+
+SYSTEM_INSTRUCTION_RECOMMENDATIONS = (
+    "You are an academic curriculum design advisor. Based ONLY on empirical job "
+    "market demand data provided, provide actionable curriculum adjustment "
+    "recommendations.\n\n"
+    "Guidelines:\n"
+    "1. For skills to ADD: Explain why this skill is needed based on the provided "
+    "demand %, suggest a concise academic module title, and recommend teaching "
+    "duration in weeks (1-4 weeks).\n"
+    "2. For skills to DROP: Explain why this topic is obsolete or unaligned with "
+    "market demand and should be phased out.\n"
+    "3. Keep all rationales succinct, factual, and strictly grounded in the "
+    "provided numbers.\n"
+    "4. Return output STRICTLY as valid JSON matching this schema:\n"
+    "{\n"
+    '  "skills_to_add": [\n'
+    '    {"name": "Skill Name", "rationale": "...", "suggested_module": "...", '
+    '"suggested_weeks": 2}\n'
+    "  ],\n"
+    '  "skills_to_drop": [\n'
+    '    {"name": "Skill Name", "rationale": "..."}\n'
+    "  ],\n"
+    '  "summary": "Executive summary of curriculum recommendations."\n'
+    "}"
+)
+
+RECOMMENDATIONS_USER_TEMPLATE = (
+    "Curriculum: {course_title}\n"
+    "Target Role: {role_query} in {location}\n"
+    "Curriculum Gap: {gap_pct}% (Coverage: {coverage_pct}%)\n\n"
+    "Missing Skills with Market Demand:\n{missing_skills_info}\n\n"
+    "Syllabus Skills with Low / Zero Market Demand:\n{obsolete_skills_info}\n\n"
+    "Generate grounded curriculum recommendations in valid JSON matching the schema."
+)

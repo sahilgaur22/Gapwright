@@ -14,8 +14,11 @@ from app.schemas.analysis import (
     AnalysisItemKind,
     AnalysisItemRead,
     AnalysisRead,
+    CurriculumRecommendationsResponse,
 )
 from app.services.analysis.gap import compute_gap_analysis
+from app.services.analysis.recommendations import generate_curriculum_recommendations
+from app.services.llm import get_llm_provider
 
 logger = logging.getLogger(__name__)
 
@@ -120,3 +123,42 @@ async def list_analyses(
     res = await db.execute(stmt)
     analyses = list(res.scalars().all())
     return [_to_analysis_read(a) for a in analyses]
+
+
+@router.get(
+    "/{analysis_id}/recommendations",
+    response_model=CurriculumRecommendationsResponse,
+)
+async def get_recommendations(
+    analysis_id: uuid.UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    max_add: Annotated[int, Query(ge=1, le=20)] = 5,
+    max_drop: Annotated[int, Query(ge=1, le=20)] = 5,
+) -> CurriculumRecommendationsResponse:
+    """Generate grounded, actionable curriculum recommendations for an analysis."""
+    provider = None
+    try:
+        provider = get_llm_provider()
+    except Exception:
+        provider = None
+
+    try:
+        return await generate_curriculum_recommendations(
+            db=db,
+            analysis_id=analysis_id,
+            llm_provider=provider,
+            max_add=max_add,
+            max_drop=max_drop,
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        ) from e
+    except Exception as e:
+        logger.error("Failed to generate recommendations: %s", str(e), exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Recommendations generation failed: {str(e)}",
+        ) from e
+
