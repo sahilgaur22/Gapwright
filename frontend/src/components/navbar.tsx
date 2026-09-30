@@ -82,6 +82,12 @@ export function Navbar() {
           >
             Gap Analysis
           </Link>
+          <Link
+            href="/policy"
+            className="text-[var(--text-main)] hover:text-[var(--color-brand-green)] dark:hover:text-[var(--color-brand-aqua)] transition-colors"
+          >
+            Governance
+          </Link>
         </nav>
 
         {/* Action Controls */}

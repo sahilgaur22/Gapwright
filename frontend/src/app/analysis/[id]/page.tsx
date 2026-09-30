@@ -25,6 +25,19 @@ export default function AnalysisDetailPage({
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<SkillFilter>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
+  const [exporting, setExporting] = useState<"csv" | "pdf" | null>(null);
+
+  const handleExport = async (format: "csv" | "pdf") => {
+    if (!analysisId) return;
+    setExporting(format);
+    try {
+      await api.downloadReport(analysisId, format);
+    } catch {
+      window.open(api.exportReportUrl(analysisId, format), "_blank");
+    } finally {
+      setExporting(null);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -207,6 +220,24 @@ export default function AnalysisDetailPage({
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => handleExport("csv")}
+                disabled={exporting !== null}
+                className="px-3 py-2 text-xs font-semibold rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] text-[var(--text-main)] transition cursor-pointer"
+              >
+                {exporting === "csv" ? "Exporting CSV..." : "Export CSV"}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleExport("pdf")}
+                disabled={exporting !== null}
+                className="px-3 py-2 text-xs font-semibold rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] text-[var(--text-main)] transition cursor-pointer"
+              >
+                {exporting === "pdf" ? "Exporting PDF..." : "Export PDF"}
+              </button>
+            </div>
             <Link
               href={`/syllabi/${analysis.syllabus_id}`}
               className="px-3.5 py-2 text-xs font-semibold rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] text-[var(--text-main)] transition"

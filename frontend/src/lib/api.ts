@@ -327,4 +327,73 @@ export const api = {
       `/api/v1/analysis/${analysisId}/recommendations?max_add=${maxAdd}&max_drop=${maxDrop}`
     );
   },
+
+  // Policy & Governance
+  getPolicyOverview: async (): Promise<PolicyOverviewResponse> => {
+    return request("/api/v1/policy/overview");
+  },
+
+  // Export
+  exportReportUrl: (analysisId: string, format: "csv" | "pdf"): string => {
+    return `${API_BASE}/api/v1/reports/${analysisId}/export?format=${format}`;
+  },
+
+  downloadReport: async (
+    analysisId: string,
+    format: "csv" | "pdf"
+  ): Promise<void> => {
+    const url = `${API_BASE}/api/v1/reports/${analysisId}/export?format=${format}`;
+    const headers = new Headers();
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("gapwright_token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+    }
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+      throw new ApiError(response.status, "Failed to download export report");
+    }
+    const blob = await response.blob();
+    if (typeof window !== "undefined") {
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `gapwright-analysis-${analysisId}.${format}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    }
+  },
 };
+
+export interface SystemicSkillGap {
+  skill_name: string;
+  category?: string | null;
+  occurrences: number;
+  average_demand_pct: number;
+  total_postings: number;
+}
+
+export interface InstitutionAlignmentSummary {
+  institution: string;
+  evaluations_count: number;
+  average_gap_pct: number;
+  average_coverage_pct: number;
+}
+
+export interface RoleMarketComparison {
+  role: string;
+  evaluations_count: number;
+  average_gap_pct: number;
+  average_coverage_pct: number;
+}
+
+export interface PolicyOverviewResponse {
+  total_analyses: number;
+  total_institutions: number;
+  average_gap_pct: number;
+  average_coverage_pct: number;
+  top_systemic_missing_skills: SystemicSkillGap[];
+  institutions: InstitutionAlignmentSummary[];
+  roles: RoleMarketComparison[];
+}
