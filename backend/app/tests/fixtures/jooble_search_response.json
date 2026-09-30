@@ -1,0 +1,29 @@
+{
+  "totalCount": 42,
+  "jobs": [
+    {
+      "id": "8930124",
+      "title": "Senior Data Scientist",
+      "location": "Bangalore, Karnataka, India",
+      "snippet": "We are seeking a Senior Data Scientist skilled in Python, SQL, scikit-learn, and deep learning architectures to build predictive consumer models.",
+      "salary": "25-35 LPA",
+      "source": "linkedin.com",
+      "type": "Full-time",
+      "link": "https://jooble.org/desc/8930124?ckey=test",
+      "company": "Swiggy",
+      "updated": "2026-09-29T11:45:00.0000000"
+    },
+    {
+      "id": "8930125",
+      "title": "Backend Python Developer",
+      "location": "Bangalore, India",
+      "snippet": "Looking for Backend Engineer with FastAPI, PostgreSQL, and Redis expertise. Experience with AWS ECS and Docker containers required.",
+      "salary": "18-24 LPA",
+      "source": "instahyre.com",
+      "type": "Full-time",
+      "link": "https://jooble.org/desc/8930125?ckey=test",
+      "company": "Razorpay",
+      "updated": "2026-09-28T09:20:00.0000000"
+    }
+  ]
+}

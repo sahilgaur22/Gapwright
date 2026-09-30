@@ -8,6 +8,7 @@ from app.services.sources.budget import (
     record_usage,
 )
 from app.services.sources.cache import ResponseCache, response_cache
+from app.services.sources.jooble import JoobleSource
 from app.services.sources.limiter import DomainRateLimiter, TokenBucket, rate_limiter
 from app.services.sources.models import RawJob
 from app.services.sources.registry import SourceRegistry, source_registry
@@ -16,6 +17,7 @@ from app.services.sources.seed import INITIAL_JOB_SOURCES, seed_job_sources
 
 # Register available connectors
 source_registry.register(AdzunaSource)
+source_registry.register(JoobleSource)
 
 __all__ = [
     "AdzunaSource",
@@ -23,6 +25,7 @@ __all__ = [
     "BudgetExhaustedError",
     "DomainRateLimiter",
     "INITIAL_JOB_SOURCES",
+    "JoobleSource",
     "RawJob",
     "ResponseCache",
     "RobotsChecker",
