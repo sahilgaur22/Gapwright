@@ -120,7 +120,7 @@ async def normalize_skill(
             emb = await embed_provider.embed(clean_name)
             if isinstance(emb, list) and emb and isinstance(emb[0], (int, float)):
                 # Cast elements to float
-                query_vector = [float(x) for x in emb]
+                query_vector = [float(x) for x in emb if isinstance(x, (int, float))]
         except Exception as exc:
             logger.warning(
                 f"Embedding failed during normalization for {clean_name}: {exc}"

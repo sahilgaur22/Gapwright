@@ -1,8 +1,11 @@
+import time
+import uuid
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import RequestResponseEndpoint
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from app.api.v1 import api_router
@@ -46,6 +49,31 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def security_and_tracing_middleware(
+    request: Request, call_next: RequestResponseEndpoint
+) -> Response:
+    request_id = request.headers.get("X-Request-ID") or uuid.uuid4().hex
+    start_time = time.monotonic()
+
+    response = await call_next(request)
+
+    duration_ms = (time.monotonic() - start_time) * 1000
+    response.headers["X-Request-ID"] = request_id
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), camera=(), microphone=()"
+
+    logger.info(
+        f"[{request_id}] {request.method} {request.url.path} "
+        f"status={response.status_code} duration={duration_ms:.2f}ms"
+    )
+    return response
+
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

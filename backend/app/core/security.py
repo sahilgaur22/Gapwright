@@ -1,5 +1,5 @@
 from datetime import UTC, datetime, timedelta
-from typing import Any
+from typing import Any, cast
 
 import bcrypt
 import jwt
@@ -45,4 +45,6 @@ def create_access_token(
 
 def decode_access_token(token: str) -> dict[str, Any]:
     """Decode and validate a JWT access token."""
-    return jwt.decode(token, settings.JWT_SECRET, algorithms=[ALGORITHM])
+    return cast(
+        dict[str, Any], jwt.decode(token, settings.JWT_SECRET, algorithms=[ALGORITHM])
+    )

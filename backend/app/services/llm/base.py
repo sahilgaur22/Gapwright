@@ -3,7 +3,9 @@ import json
 import logging
 import re
 from collections.abc import Callable, Coroutine
-from typing import Any, Protocol, runtime_checkable
+from typing import Any, Protocol, TypeVar, runtime_checkable
+
+T = TypeVar("T")
 
 import httpx
 
@@ -43,7 +45,7 @@ def parse_json_from_llm_response(text: str) -> dict[str, Any] | list[Any]:
     return data
 
 
-async def execute_with_retry[T](
+async def execute_with_retry(
     coro_fn: Callable[[], Coroutine[Any, Any, T]],
     *,
     max_retries: int = 3,

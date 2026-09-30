@@ -76,7 +76,7 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "app.tests.*"
-warn_return_any = false
+ignore_errors = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"

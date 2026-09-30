@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.config import settings
+from app.core.rate_limit import rate_limit
 from app.core.security import decode_access_token
 from app.db.models.job import CrawlState, JobPosting, JobSkill, JobSource
 from app.db.models.skill import Skill
@@ -73,7 +74,11 @@ async def verify_crawl_auth(
     )
 
 
-@router.post("/jobs/crawl", response_model=CrawlTriggerResponse)
+@router.post(
+    "/jobs/crawl",
+    response_model=CrawlTriggerResponse,
+    dependencies=[Depends(rate_limit(times=10, seconds=60, name="job_crawl"))],
+)
 async def trigger_crawl(
     db: Annotated[AsyncSession, Depends(get_db)],
     _auth: Annotated[bool, Depends(verify_crawl_auth)],

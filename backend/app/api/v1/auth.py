@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import get_current_user
+from app.core.rate_limit import rate_limit
 from app.core.security import create_access_token, get_password_hash, verify_password
 from app.db.models.user import User
 from app.db.session import get_db
@@ -18,6 +19,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Register a new user",
+    dependencies=[Depends(rate_limit(times=10, seconds=60, name="auth_register"))],
 )
 async def register(
     user_in: UserCreate,
@@ -47,6 +49,7 @@ async def register(
     "/login",
     response_model=TokenResponse,
     summary="Authenticate user and issue JWT token",
+    dependencies=[Depends(rate_limit(times=20, seconds=60, name="auth_login"))],
 )
 async def login(
     credentials: UserLogin,

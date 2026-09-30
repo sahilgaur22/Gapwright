@@ -17,6 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.deps import get_current_active_user
+from app.core.rate_limit import rate_limit
 from app.db.models.skill import Skill
 from app.db.models.syllabus import Syllabus, SyllabusSkill
 from app.db.models.user import User
@@ -81,6 +82,7 @@ async def _get_scoped_syllabus(
     response_model=SyllabusRead,
     status_code=status.HTTP_201_CREATED,
     summary="Upload and parse a syllabus file (PDF or DOCX)",
+    dependencies=[Depends(rate_limit(times=15, seconds=60, name="syllabus_upload"))],
 )
 async def upload_syllabus(
     title: Annotated[str, Form(min_length=1, max_length=255)],
