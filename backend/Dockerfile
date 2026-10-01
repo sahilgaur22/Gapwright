@@ -41,9 +41,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Create unprivileged application service user
+# Create unprivileged application service user with home directory
 RUN addgroup --system --gid 10001 appgroup && \
-    adduser --system --uid 10001 --ingroup appgroup --no-create-home appuser
+    adduser --system --uid 10001 --ingroup appgroup --home /home/appuser appuser && \
+    mkdir -p /home/appuser && chown -R appuser:appgroup /home/appuser
+
+ENV HOME=/home/appuser
 
 # Copy isolated virtual environment
 COPY --from=builder /opt/venv /opt/venv
@@ -61,4 +64,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:${PORT}/healthz || exit 1
 
-CMD ["sh", "-c", "exec gunicorn app.main:app -w 2 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:${PORT} --access-logfile - --error-logfile - --forwarded-allow-ips '*'"]
+CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips '*'"]
+
