@@ -84,6 +84,13 @@ async def _get_scoped_syllabus(
     summary="Upload and parse a syllabus file (PDF or DOCX)",
     dependencies=[Depends(rate_limit(times=15, seconds=60, name="syllabus_upload"))],
 )
+@router.post(
+    "/upload",
+    response_model=SyllabusRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Upload and parse a syllabus file (PDF or DOCX) (alias)",
+    dependencies=[Depends(rate_limit(times=15, seconds=60, name="syllabus_upload"))],
+)
 async def upload_syllabus(
     title: Annotated[str, Form(min_length=1, max_length=255)],
     file: Annotated[UploadFile, File()],
@@ -98,6 +105,12 @@ async def upload_syllabus(
     persist metadata and raw_text, and return the created record.
     Optionally queues background skill extraction and normalization pipeline.
     """
+    if current_user.role not in ("admin", "educator"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden. Only educators and administrators can upload syllabus documents.",
+        )
+
     contents = await file.read()
     if not contents:
         raise HTTPException(
@@ -225,6 +238,12 @@ async def trigger_syllabus_process(
     execution in background. When async_mode is False, executes pipeline
     immediately within request and returns updated record.
     """
+    if current_user.role not in ("admin", "educator"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden. Only educators and administrators can process syllabus documents.",
+        )
+
     syllabus = await _get_scoped_syllabus(syllabus_id, current_user, db)
 
     if async_mode:

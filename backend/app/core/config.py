@@ -52,14 +52,33 @@ class Settings(BaseSettings):
     ENABLE_PLAYWRIGHT: bool = False
 
     # CORS
-    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: list[str] | str = ["http://localhost:3000"]
     CORS_ORIGIN_REGEX: str | None = None
     NEXT_PUBLIC_API_URL: str = "http://localhost:8000"
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def assemble_database_url(cls, v: Any) -> str:
+        if isinstance(v, str):
+            if v.startswith("postgres://"):
+                return v.replace("postgres://", "postgresql+asyncpg://", 1)
+            elif v.startswith("postgresql://") and not v.startswith("postgresql+asyncpg://"):
+                return v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return v
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v: Any) -> list[str]:
-        if isinstance(v, str) and not v.startswith("["):
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                import json
+
+                try:
+                    parsed = json.loads(v)
+                    if isinstance(parsed, list):
+                        return [str(i) for i in parsed]
+                except Exception:
+                    pass
             return [i.strip() for i in v.split(",") if i.strip()]
         elif isinstance(v, list):
             return [str(i) for i in v]

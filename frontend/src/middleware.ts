@@ -6,7 +6,9 @@ export function middleware(request: NextRequest) {
 
   const isProtectedRoute =
     pathname.startsWith("/syllabi") ||
-    pathname.startsWith("/analysis");
+    pathname.startsWith("/analysis") ||
+    pathname.startsWith("/demand") ||
+    pathname.startsWith("/policy");
 
   const isAuthRoute =
     pathname === "/login" || pathname === "/register";
@@ -19,7 +21,13 @@ export function middleware(request: NextRequest) {
   }
 
   // If user is already authenticated and visits login/register -> redirect to syllabi
-  if (isAuthRoute && sessionToken) {
+  // (allows ?force=true or ?switch=true to allow switching accounts or re-authenticating)
+  if (
+    isAuthRoute &&
+    sessionToken &&
+    !request.nextUrl.searchParams.has("force") &&
+    !request.nextUrl.searchParams.has("switch")
+  ) {
     return NextResponse.redirect(new URL("/syllabi", request.url));
   }
 
@@ -30,6 +38,8 @@ export const config = {
   matcher: [
     "/syllabi/:path*",
     "/analysis/:path*",
+    "/demand/:path*",
+    "/policy/:path*",
     "/login",
     "/register",
   ],

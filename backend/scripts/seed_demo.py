@@ -81,7 +81,7 @@ async def seed_sources(db: AsyncSession) -> None:
             )
             db.add(source)
     await db.commit()
-    logger.info("✓ Job sources seeded")
+    logger.info("[OK] Job sources seeded")
 
 
 async def seed_institution_and_users(db: AsyncSession) -> tuple[Institution, User]:
@@ -103,6 +103,7 @@ async def seed_institution_and_users(db: AsyncSession) -> tuple[Institution, Use
     users_data = [
         ("educator@gapwright.edu", "Password123!", "educator", institution.id),
         ("policymaker@highered.gov.in", "Password123!", "policymaker", None),
+        ("student@gapwright.edu", "Password123!", "student", institution.id),
         ("admin@gapwright.local", "AdminSecret123!", "admin", None),
     ]
 
@@ -124,7 +125,7 @@ async def seed_institution_and_users(db: AsyncSession) -> tuple[Institution, Use
             educator_user = user
 
     await db.commit()
-    logger.info("✓ Demo institution and users seeded")
+    logger.info("[OK] Demo institution and users seeded")
     assert educator_user is not None
     return institution, educator_user
 
@@ -162,7 +163,7 @@ async def seed_skills(db: AsyncSession) -> dict[str, Skill]:
         skill_map[name] = skill
 
     await db.commit()
-    logger.info("✓ Canonical skills taxonomy seeded")
+    logger.info("[OK] Canonical skills taxonomy seeded")
     return skill_map
 
 
@@ -177,7 +178,7 @@ async def seed_fixture_jobs_and_demand(
         data = json.load(f)
 
     today = date.today()
-    jobs = data.get("jobs", [])
+    jobs = data if isinstance(data, list) else data.get("jobs", [])
     inserted_jobs = 0
 
     for item in jobs:
@@ -363,7 +364,7 @@ async def seed_demo_syllabus_and_analysis(
                 )
 
     await db.commit()
-    logger.info("✓ Demo syllabus, syllabus skills, and precomputed analysis seeded")
+    logger.info("[OK] Demo syllabus, syllabus skills, and precomputed analysis seeded")
 
 
 async def main() -> None:
@@ -381,11 +382,11 @@ async def main() -> None:
         await seed_demo_syllabus_and_analysis(session, institution, educator, skill_map)
 
     await engine.dispose()
-    logger.info("\n🎉 Gapwright demo environment successfully seeded!")
+    logger.info("\n=== Gapwright demo environment successfully seeded! ===")
     logger.info("Demo Credentials:")
-    logger.info("  • Educator:    educator@gapwright.edu    / Password123!")
-    logger.info("  • Policymaker: policymaker@highered.gov.in / Password123!")
-    logger.info("  • Admin:       admin@gapwright.local       / AdminSecret123!\n")
+    logger.info("  * Educator:    educator@gapwright.edu    / Password123!")
+    logger.info("  * Policymaker: policymaker@highered.gov.in / Password123!")
+    logger.info("  * Student:     student@gapwright.edu     / Password123!\n")
 
 
 if __name__ == "__main__":

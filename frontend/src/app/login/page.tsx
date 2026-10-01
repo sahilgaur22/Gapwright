@@ -4,17 +4,34 @@ import React, { Suspense, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { AlertCircle, ArrowRight, Loader2, Lock, Mail } from "lucide-react";
+import { AlertCircle, ArrowRight, BookOpen, GraduationCap, Landmark, Loader2, Lock, Mail } from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTarget = searchParams.get("redirect") || "/syllabi";
+  const rawRedirect = searchParams.get("redirect");
+  const redirectTarget = rawRedirect || "/syllabi";
 
+  const [role, setRole] = useState<"educator" | "policymaker" | "student">("educator");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const fillDemo = (roleChoice: "educator" | "policymaker" | "student") => {
+    setRole(roleChoice);
+    if (roleChoice === "educator") {
+      setEmail("educator@gapwright.edu");
+      setPassword("Password123!");
+    } else if (roleChoice === "policymaker") {
+      setEmail("policymaker@highered.gov.in");
+      setPassword("Password123!");
+    } else if (roleChoice === "student") {
+      setEmail("student@gapwright.edu");
+      setPassword("Password123!");
+    }
+    setError(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +56,14 @@ function LoginForm() {
         localStorage.setItem("gapwright_token", data.access_token);
         window.dispatchEvent(new Event("storage"));
       }
+
+      const redirectTarget =
+        rawRedirect ||
+        (role === "policymaker"
+          ? "/policy"
+          : role === "student"
+            ? "/demand"
+            : "/syllabi");
 
       router.push(redirectTarget);
     } catch (err) {
@@ -82,6 +107,69 @@ function LoginForm() {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {/* Role Selection Toggle */}
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-semibold text-[var(--text-main)]">
+              Sign In Persona / Role
+            </label>
+            <span className="text-[10px] text-[var(--text-muted)]">
+              Select portal type
+            </span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              {
+                id: "educator",
+                label: "Educator",
+                desc: "Syllabi & Gaps",
+                icon: GraduationCap,
+              },
+              {
+                id: "policymaker",
+                label: "Policymaker",
+                desc: "Governance",
+                icon: Landmark,
+              },
+              {
+                id: "student",
+                label: "Student",
+                desc: "Market Skills",
+                icon: BookOpen,
+              },
+            ].map((option) => {
+              const Icon = option.icon;
+              const isSelected = role === option.id;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => fillDemo(option.id as "educator" | "policymaker" | "student")}
+                  className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition cursor-pointer ${
+                    isSelected
+                      ? "border-[var(--color-brand-green)] bg-[var(--color-brand-mint)]/40 dark:border-[var(--color-brand-aqua)] dark:bg-[var(--color-brand-aqua)]/15 font-semibold shadow-xs"
+                      : "border-[var(--border-subtle)] bg-[var(--bg-page)] text-[var(--text-muted)] hover:border-[var(--text-muted)]/60"
+                  }`}
+                >
+                  <Icon
+                    className={`w-4 h-4 mb-1 ${
+                      isSelected
+                        ? "text-[var(--color-brand-green)] dark:text-[var(--color-brand-aqua)]"
+                        : "text-[var(--text-muted)]"
+                    }`}
+                  />
+                  <span className={`text-xs ${isSelected ? "text-[var(--text-main)]" : "text-[var(--text-muted)]"}`}>
+                    {option.label}
+                  </span>
+                  <span className="text-[10px] text-[var(--text-muted)] leading-tight mt-0.5 hidden sm:inline">
+                    {option.desc}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="email"
@@ -96,7 +184,13 @@ function LoginForm() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="dean.academics@university.edu"
+              placeholder={
+                role === "policymaker"
+                  ? "policymaker@highered.gov.in"
+                  : role === "student"
+                    ? "student@university.edu"
+                    : "educator@gapwright.edu"
+              }
               required
               className="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-page)] text-[var(--text-main)] placeholder:text-[var(--text-muted)]/60 focus:outline-none focus:border-[var(--color-brand-green)] dark:focus:border-[var(--color-brand-aqua)] transition"
             />

@@ -214,9 +214,15 @@ export const api = {
     return request("/api/v1/auth/me");
   },
 
-  logout: () => {
+  logout: async (): Promise<void> => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("gapwright_token");
+      window.dispatchEvent(new Event("storage"));
+      try {
+        await fetch("/api/auth/logout", { method: "POST" });
+      } catch {
+        // Silently handle offline/network errors during logout
+      }
     }
   },
 
@@ -226,7 +232,7 @@ export const api = {
     formData.append("file", file);
     formData.append("title", title);
 
-    const url = `${API_BASE}/api/v1/syllabi/upload`;
+    const url = `${API_BASE}/api/v1/syllabi`;
     const headers = new Headers();
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("gapwright_token");

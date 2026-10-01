@@ -5,7 +5,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password, full_name } = body;
+    const { email, password, full_name, role } = body;
 
     if (!email || !password) {
       return NextResponse.json(
@@ -18,7 +18,12 @@ export async function POST(request: NextRequest) {
     const regRes = await fetch(`${API_BASE}/api/v1/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, full_name }),
+      body: JSON.stringify({
+        email,
+        password,
+        full_name,
+        role: role || "educator",
+      }),
     });
 
     const regData = await regRes.json();

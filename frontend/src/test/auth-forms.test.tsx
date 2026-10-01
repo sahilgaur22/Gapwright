@@ -107,6 +107,52 @@ describe("Authentication Pages & Forms", () => {
     });
     expect(global.fetch).not.toHaveBeenCalled();
   });
+
+  it("submits registration with selected role and redirects", async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        user: { id: "u-1", email: "dr.patel@stateuniv.edu", role: "policymaker" },
+        access_token: "token-policymaker",
+      }),
+    } as Response);
+
+    render(<RegisterPage />);
+
+    // Select Policymaker persona
+    fireEvent.click(screen.getByRole("button", { name: /policymaker/i }));
+
+    fireEvent.change(screen.getByLabelText(/academic \/ administrator name/i), {
+      target: { value: "Dr. Patel" },
+    });
+    fireEvent.change(screen.getByLabelText(/institutional email/i), {
+      target: { value: "dr.patel@stateuniv.edu" },
+    });
+    fireEvent.change(screen.getByLabelText(/^password/i), {
+      target: { value: "securepassword123" },
+    });
+    fireEvent.change(screen.getByLabelText(/confirm password/i), {
+      target: { value: "securepassword123" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /create account/i }));
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/auth/register",
+        expect.objectContaining({
+          method: "POST",
+          body: JSON.stringify({
+            email: "dr.patel@stateuniv.edu",
+            password: "securepassword123",
+            full_name: "Dr. Patel",
+            role: "policymaker",
+          }),
+        })
+      );
+      expect(mockPush).toHaveBeenCalledWith("/syllabi");
+    });
+  });
 });
 
 describe("Route Protection Middleware", () => {

@@ -183,6 +183,22 @@ def upgrade() -> None:
         sa.Column("calls", sa.Integer(), nullable=False, server_default="0"),
     )
 
+    conn = op.get_bind()
+    has_vector = False
+    try:
+        res = conn.execute(
+            sa.text("SELECT 1 FROM pg_extension WHERE extname = 'vector'")
+        ).scalar()
+        has_vector = bool(res)
+    except Exception:
+        has_vector = False
+
+    embedding_type = (
+        pgvector.sqlalchemy.Vector(settings.EMBED_DIM)
+        if has_vector
+        else postgresql.ARRAY(sa.Float()).with_variant(sa.JSON(), "sqlite")
+    )
+
     # 8. skills
     op.create_table(
         "skills",
@@ -191,7 +207,7 @@ def upgrade() -> None:
         sa.Column("category", sa.String(length=100), nullable=True),
         sa.Column(
             "embedding",
-            pgvector.sqlalchemy.Vector(settings.EMBED_DIM),
+            embedding_type,
             nullable=True,
         ),
         sa.Column(
@@ -205,14 +221,15 @@ def upgrade() -> None:
         "ix_skills_canonical_name", "skills", ["canonical_name"], unique=True
     )
     op.create_index("ix_skills_category", "skills", ["category"])
-    op.create_index(
-        "ix_skills_embedding_hnsw",
-        "skills",
-        ["embedding"],
-        postgresql_using="hnsw",
-        postgresql_with={"m": 16, "ef_construction": 64},
-        postgresql_ops={"embedding": "vector_cosine_ops"},
-    )
+    if has_vector:
+        op.create_index(
+            "ix_skills_embedding_hnsw",
+            "skills",
+            ["embedding"],
+            postgresql_using="hnsw",
+            postgresql_with={"m": 16, "ef_construction": 64},
+            postgresql_ops={"embedding": "vector_cosine_ops"},
+        )
 
     # 9. syllabus_skills
     op.create_table(

@@ -16,19 +16,21 @@ services:
       - key: EMBED_DIM
         value: "768"
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: gapwright-db
+          property: connectionString
       - key: JWT_SECRET
-        sync: false
+        generateValue: true
       - key: LLM_PROVIDER
-        sync: false
+        value: gemini
       - key: GEMINI_API_KEY
         sync: false
       - key: GROQ_API_KEY
         sync: false
       - key: LLM_MODEL
-        sync: false
+        value: "gemini-2.0-flash"
       - key: EMBED_MODEL
-        sync: false
+        value: "models/text-embedding-004"
       - key: ADZUNA_APP_ID
         sync: false
       - key: ADZUNA_APP_KEY
@@ -36,10 +38,17 @@ services:
       - key: JOOBLE_API_KEY
         sync: false
       - key: ENABLED_SOURCES
-        sync: false
+        value: "adzuna,jooble,remotive,remoteok,wwr_rss,fixture"
       - key: CRAWL_PAIRS
-        sync: false
+        value: "Data Scientist|Bangalore;Backend Developer|Delhi"
       - key: CRAWL_TRIGGER_TOKEN
         sync: false
       - key: CORS_ORIGINS
         sync: false
+
+databases:
+  - name: gapwright-db
+    plan: free
+    region: singapore
+    databaseName: gap
+    user: gapwright_user

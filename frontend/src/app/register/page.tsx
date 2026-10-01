@@ -4,15 +4,17 @@ import React, { Suspense, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { AlertCircle, ArrowRight, Loader2, Lock, Mail, User } from "lucide-react";
+import { AlertCircle, ArrowRight, BookOpen, GraduationCap, Landmark, Loader2, Lock, Mail, User } from "lucide-react";
 
 function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTarget = searchParams.get("redirect") || "/syllabi";
+  const rawRedirect = searchParams.get("redirect");
+  const redirectTarget = rawRedirect || "/syllabi";
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState<"educator" | "policymaker" | "student">("educator");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +44,7 @@ function RegisterForm() {
           email,
           password,
           full_name: fullName,
+          role,
         }),
       });
 
@@ -56,6 +59,7 @@ function RegisterForm() {
         window.dispatchEvent(new Event("storage"));
       }
 
+      const redirectTarget = rawRedirect || (role === "policymaker" ? "/policy" : "/syllabi");
       router.push(redirectTarget);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred");
@@ -98,6 +102,64 @@ function RegisterForm() {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {/* Role / Persona Selector */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-[var(--text-main)]">
+            Account Type / Persona
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              {
+                id: "educator",
+                label: "Educator",
+                desc: "Syllabi & Gaps",
+                icon: GraduationCap,
+              },
+              {
+                id: "policymaker",
+                label: "Policymaker",
+                desc: "Governance",
+                icon: Landmark,
+              },
+              {
+                id: "student",
+                label: "Student",
+                desc: "Market Skills",
+                icon: BookOpen,
+              },
+            ].map((option) => {
+              const Icon = option.icon;
+              const isSelected = role === option.id;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => setRole(option.id as "educator" | "policymaker" | "student")}
+                  className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition cursor-pointer ${
+                    isSelected
+                      ? "border-[var(--color-brand-green)] bg-[var(--color-brand-mint)]/40 dark:border-[var(--color-brand-aqua)] dark:bg-[var(--color-brand-aqua)]/15 font-semibold shadow-xs"
+                      : "border-[var(--border-subtle)] bg-[var(--bg-page)] text-[var(--text-muted)] hover:border-[var(--text-muted)]/60"
+                  }`}
+                >
+                  <Icon
+                    className={`w-4 h-4 mb-1 ${
+                      isSelected
+                        ? "text-[var(--color-brand-green)] dark:text-[var(--color-brand-aqua)]"
+                        : "text-[var(--text-muted)]"
+                    }`}
+                  />
+                  <span className={`text-xs ${isSelected ? "text-[var(--text-main)]" : "text-[var(--text-muted)]"}`}>
+                    {option.label}
+                  </span>
+                  <span className="text-[10px] text-[var(--text-muted)] leading-tight mt-0.5 hidden sm:inline">
+                    {option.desc}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="fullName"

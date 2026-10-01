@@ -35,6 +35,21 @@ export default function SyllabiPage() {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [processingStatus, setProcessingStatus] = useState<string>("processing");
 
+  let userRole: string | null = null;
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("gapwright_token");
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        userRole = payload.role || null;
+      } catch {
+        userRole = null;
+      }
+    }
+  }
+
+  const canUpload = userRole !== "student" && userRole !== "policymaker";
+
   const refreshSyllabi = useCallback(async () => {
     try {
       const data = await api.listSyllabi();
@@ -165,23 +180,55 @@ export default function SyllabiPage() {
           </p>
         </div>
 
-        <button
-          onClick={() => setShowUploader((prev) => !prev)}
-          className="px-4 py-2.5 rounded-xl bg-[var(--color-primary)] text-[var(--color-primary-text)] font-semibold text-sm hover:opacity-90 transition flex items-center gap-2 cursor-pointer shadow-sm"
-        >
-          {showUploader ? (
-            <>
-              <X className="w-4 h-4" />
-              <span>Close Uploader</span>
-            </>
-          ) : (
-            <>
-              <Plus className="w-4 h-4" />
-              <span>Upload Syllabus</span>
-            </>
-          )}
-        </button>
+        {canUpload ? (
+          <button
+            onClick={() => setShowUploader((prev) => !prev)}
+            className="px-4 py-2.5 rounded-xl bg-[var(--color-primary)] text-[var(--color-primary-text)] font-semibold text-sm hover:opacity-90 transition flex items-center gap-2 cursor-pointer shadow-sm"
+          >
+            {showUploader ? (
+              <>
+                <X className="w-4 h-4" />
+                <span>Close Uploader</span>
+              </>
+            ) : (
+              <>
+                <Plus className="w-4 h-4" />
+                <span>Upload Syllabus</span>
+              </>
+            )}
+          </button>
+        ) : userRole === "policymaker" ? (
+          <Link
+            href="/policy"
+            className="px-4 py-2 text-xs font-semibold rounded-xl bg-[var(--color-brand-pink)] text-[var(--color-brand-navy)] hover:opacity-90 transition flex items-center gap-2 shadow-xs"
+          >
+            <span>Open Governance Portal</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        ) : (
+          <Link
+            href="/demand"
+            className="px-4 py-2 text-xs font-semibold rounded-xl bg-[var(--color-primary)] text-[var(--color-primary-text)] hover:opacity-90 transition flex items-center gap-2 shadow-xs"
+          >
+            <span>Explore Market Skills</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        )}
       </div>
+
+      {userRole === "student" && (
+        <div className="p-3.5 rounded-xl bg-[var(--color-brand-mint)]/30 border border-[var(--color-brand-green)]/30 text-xs text-[var(--text-main)] flex items-center justify-between gap-3">
+          <span>
+            🎓 <strong>Student View:</strong> You are exploring accredited course competencies. To analyze industry hiring volume and career-specific skill demands, visit the Market Explorer.
+          </span>
+          <Link
+            href="/demand"
+            className="font-bold text-[var(--color-brand-green)] dark:text-[var(--color-brand-aqua)] hover:underline shrink-0"
+          >
+            View Demand →
+          </Link>
+        </div>
+      )}
 
       {/* Active Processing Card */}
       {processingId && (

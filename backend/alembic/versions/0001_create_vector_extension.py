@@ -8,6 +8,7 @@ Create Date: 2026-09-29 23:25:00.000000
 
 from collections.abc import Sequence
 
+import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
@@ -18,8 +19,18 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    op.execute("CREATE EXTENSION IF NOT EXISTS vector;")
+    conn = op.get_bind()
+    available = conn.execute(
+        sa.text("SELECT 1 FROM pg_available_extensions WHERE name = 'vector'")
+    ).scalar()
+    if available:
+        op.execute("CREATE EXTENSION IF NOT EXISTS vector;")
 
 
 def downgrade() -> None:
-    op.execute("DROP EXTENSION IF EXISTS vector;")
+    conn = op.get_bind()
+    installed = conn.execute(
+        sa.text("SELECT 1 FROM pg_extension WHERE extname = 'vector'")
+    ).scalar()
+    if installed:
+        op.execute("DROP EXTENSION IF EXISTS vector;")

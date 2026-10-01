@@ -70,7 +70,7 @@ export default function Home() {
       </section>
 
       {/* Value Pillars */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <section id="about" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full scroll-mt-24">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-main)]">
             How Gapwright Aligns Academia with Industry
@@ -157,12 +157,6 @@ export default function Home() {
               className="px-6 py-3 rounded-xl bg-[var(--color-primary)] text-[var(--color-primary-text)] font-semibold text-sm hover:opacity-90 transition text-center shadow-sm"
             >
               Start Analysis Now
-            </Link>
-            <Link
-              href="/sources"
-              className="px-6 py-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-[var(--text-main)] font-semibold text-sm hover:border-[var(--border-strong)] transition text-center"
-            >
-              View Data Sources
             </Link>
           </div>
         </div>

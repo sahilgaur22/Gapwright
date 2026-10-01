@@ -12,7 +12,7 @@ import {
 
 export function Footer() {
   return (
-    <footer className="w-full border-t border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-main)] transition-colors">
+    <footer id="contact" className="w-full border-t border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-main)] transition-colors scroll-mt-12">
       {/* Top Govt Initiative Banner */}
       <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] py-3 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs text-[var(--text-secondary)]">
