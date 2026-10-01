@@ -108,7 +108,10 @@ async def upload_syllabus(
     if current_user.role not in ("admin", "educator"):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Forbidden. Only educators and administrators can upload syllabus documents.",
+            detail=(
+                "Forbidden. Only educators and administrators "
+                "can upload syllabus documents."
+            ),
         )
 
     contents = await file.read()
@@ -241,7 +244,10 @@ async def trigger_syllabus_process(
     if current_user.role not in ("admin", "educator"):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Forbidden. Only educators and administrators can process syllabus documents.",
+            detail=(
+                "Forbidden. Only educators and administrators "
+                "can process syllabus documents."
+            ),
         )
 
     syllabus = await _get_scoped_syllabus(syllabus_id, current_user, db)

@@ -5,8 +5,6 @@ import re
 from collections.abc import Callable, Coroutine
 from typing import Any, Protocol, TypeVar, runtime_checkable
 
-T = TypeVar("T")
-
 import httpx
 
 from app.services.llm.exceptions import (
@@ -14,6 +12,8 @@ from app.services.llm.exceptions import (
     ProviderUnavailableError,
     RateLimitError,
 )
+
+T = TypeVar("T")
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,7 @@ def parse_json_from_llm_response(text: str) -> dict[str, Any] | list[Any]:
     return data
 
 
-async def execute_with_retry(
+async def execute_with_retry[T](
     coro_fn: Callable[[], Coroutine[Any, Any, T]],
     *,
     max_retries: int = 3,

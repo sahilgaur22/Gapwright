@@ -1,4 +1,5 @@
 import asyncio
+
 import asyncpg
 
 
@@ -13,9 +14,7 @@ async def main():
         )
         print("[OK] Connected to PostgreSQL as user 'postgres'")
 
-        exists = await conn.fetchval(
-            "SELECT 1 FROM pg_database WHERE datname = 'gap'"
-        )
+        exists = await conn.fetchval("SELECT 1 FROM pg_database WHERE datname = 'gap'")
         if not exists:
             await conn.execute("CREATE DATABASE gap")
             print("[OK] Created database 'gap'")
