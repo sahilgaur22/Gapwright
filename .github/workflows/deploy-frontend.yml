@@ -52,7 +52,7 @@ jobs:
           echo "$DEPLOY_URL" > url.txt
 
       - name: Comment PR with Preview URL
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         if: steps.deploy.outputs.url != ''
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
